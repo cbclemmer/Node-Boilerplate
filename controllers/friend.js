@@ -35,7 +35,7 @@ module.exports = {
             if(friend){
                 return exits.error("Request already sent");
             }
-            var obj = {users: [inputs.user, inputs.request], state: 1};
+            var obj = {users: [inputs.user, inputs.request], requestTo: inputs.request, state: 1};
             (new Friend(obj)).save(function(err, friend){
                 if(err) throw err;
                 return exits.success(friend);
@@ -70,6 +70,21 @@ module.exports = {
             request: the ID that you are making a request to.
     */
     validateRequest: function(inputs, exits){
-        
+        Friend.findOne({users: inputs.user, users: inputs.request}, function(err, friend){
+            if(err) throw err;
+            if(!friend)
+                return exits.error("Request not found");
+            if(friend.state==2)
+                return exits.error("Already friends");
+            if(friend.requestTo==inputs.user){
+                friend.state = 2;
+                friend.save(function(err, friend){
+                    return exits.success(friend);
+                });
+            }else{
+                return exits.error("User cannot validate");
+            }
+            
+        });
     }
 }

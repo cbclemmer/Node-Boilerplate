@@ -46,4 +46,21 @@ module.exports = function(app, controllers){
             }
         })
     });
+    app.post('/friend/validaterequest/:request', function(req, res){
+            redis.get("user", function(err, user){
+                if(user){
+                    var obj = req.params;
+                    obj.user = user;
+                    controllers.friend.validateRequest(obj, {
+                        success: function(friend){
+                            res.json(friend);
+                        }, error: function(error){
+                            res.json({err: error});
+                        }
+                    })
+                }else{
+                    res.json({err: "Not logged in"});
+                }
+            });
+    });
 }
