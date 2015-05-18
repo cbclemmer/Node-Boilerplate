@@ -1,10 +1,154 @@
-<html>
-<head>
-    <title>
-        App
-    </title>
-</head>
-<body>
-    This is the body
-</body>
+<!DOCTYPE html>
+<html ng-app="app" >
+  <head>
+    <title>Your App Here!</title>
+
+    <!-- Viewport mobile tag for sensible mobile support -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--STYLES-->
+    <link rel="stylesheet" href="/styles/importer.css">
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/material.css">
+    <!--STYLES END-->
+  </head>
+
+  <body>
+    <!--SCRIPTS-->
+    <!--SCRIPTS END-->
+	<div ng-controller="userController as use">
+			<div id="err"></div>
+            <div id="info"></div>
+        <div class="top" ng-hide="user.name">
+            Boiler
+        </div>
+        <div class="top loggedIn">
+			<button class="iconButton hamburger" id="menuButton"></button>
+			     <b>{{user.name}}</b> <i>@{{user.username}}</i>
+			<div id="aboutButton"><img src="images/details.png" class="notInline" /></div>
+			<div id="newPostButton">+</div>
+			&emsp;
+			<div class="topRight">
+				<input type="text" placeholder="Search..." id="search"/>
+				<img src="images/search.png" class="notInline search" id="searchButton"></img>
+			</div>
+		</div>
+      
+        <div id="searchResults" ng-controller="searchController as s">
+            <div ng-repeat="option in options" ng-click="s.getPage(option)">
+                <a href="/api/show/{{option.handle}}"><b>{{option.name}}</b> @{{option.handle}}</a>
+            </div>
+		</div>
+            <div id="newPost" ng-controller="postController as post">
+                Current: {{post.current}}
+    	       <form ng-submit="post.addObj()" enctype="multipart/form-data">
+        	       Type: <br>
+        	       <select ng-model="post.temp.objekts[post.current].type" id="pTypee" ng-change="post.an()">
+        	           <option value="short" selected="selected">Short</option>
+                        <option value="md">Mark Down</option>
+                        <option value="pic">Picture</option>
+        	       </select><br>
+                    <select ng-model="post.temp.vis">
+                        <option value="true">Public</option>
+                        <option value="false">Private</option>
+                    </select><br>
+                    <input type="text" placeholder="name" ng-model="post.temp.name" ng-show="post.temp.an"><br>
+        	       <!-- for short -->
+        	       <!--<textarea  id="shortText"></textarea><br>-->
+                    <textarea ng-model="post.temp.objekts[post.current].text" id="text-input" oninput="this.editor.update()"
+            rows="6" cols="60" ng-hide="post.temp.objekts[post.current].type=='pic'">Preview **Markdown** here.</textarea><br>
+                    <span ng-show="post.temp.objekts[post.current].type=='pic'">
+                        <input type="text" placeholder="name for picture(optional)" ng-model="post.picName">
+                        <input type="file" ng-file-select="onFileSelect($files)" name="picture" enctype="multipart/form-data">
+                    </span>
+                    <script>
+                        function Editor(input, preview) {
+                            this.update = function () {
+                            preview.innerHTML = markdown.toHTML(input.value);
+                            };
+                            input.editor = this;
+                            this.update();
+                        }
+                        var $i = function (id) { return document.getElementById(id); };
+                    </script>
+                </form>
+                <button ng-click="post.lastObj()">last part</button>
+                <button ng-click="post.addObj()">add part</button>
+                <button ng-click="post.create('')">Create Post</button>
+                <form ng-submit="post.addTag()">
+        	       <input type="text" placeholder="Add tag..." ng-model="post.tag" />
+                    <ul>
+                        <li ng-repeat="tag in post.tags">{{tag}}</li>
+                    </ul>
+                    </form>
+                    <h4>Preview</h4>
+                    <div ng-repeat="obj in post.temp.objekts">
+                    <h6>{{obj.type}}</h6>
+                    <span ng-show="obj.type=='short'||obj.type=='md'">{{obj.text}}</span>
+                    <span ng-show="obj.type=='pic'">
+                        <span ng-hide="obj.source.length">Empty</span>
+                        <span ng-show="obj.source.length">{{obj.source}}</span>
+                    </span>
+                    </div>
+                </form>
+                <div id="preview"></div>
+                <script>
+                    new Editor($i("text-input"), $i("preview"));
+                </script>
+            </div>
+        </div>
+        <div id="aboutDiv">
+            <div class="aboutDivOption" id="aboutGroups">Groups</div>
+			<div class="aboutDivOption" id="aboutFriends">Friends</div>
+            <div class="aboutDivOption" id="aboutFR">Friend Requests</div>
+		</div>
+		<div id="shadow"></div>
+		<div id="sideNav" ng-controller="userController as use">
+			<ul>
+				<li><img src="images/home.png" class="notInline">&emsp;<a href="/api/show/{{option.handle}}">@{{user.username}}</a></li>
+                <li><a ui-sref="feed"><img src="images/feed.png" class="notInline">&emsp;Feed</a></li>
+                <li><a ui-sref="settings"><img src="images/settings.png" class="notInline">&emsp;Settings</a></li>
+                <li><a ui-sref="messages"><img src="images/messages.png" class="notInline">&emsp;Messages</a></li>
+				<li ng-click="use.logOut()"><img src="images/logout.png" class="notInline">&emsp;Logout</a></li>
+			</ul>
+		</div>
+		<div id="friendsDiv">
+				<div class="optionTop">
+					<span id="friendsExit">X</span>
+					
+                    <h1 class="sFriends">Friends</h1>
+                    <h1 class="sFR">Fried Requests</h1>
+                    <h1 class="sGroups">Groups</h1>
+                    
+					<input class="sFriends" type="text" placeholder="Search for Friends" id="friendsSearch"/>
+				</div>
+				<div id="friendsResults">
+                    <!-- Friends -->
+					<div ng-repeat="friend in user.fJSON" class="sFriends">
+                        <a href="/api/show/{{friend.username}}"> {{friend.name}}</a> <i>@{{friend.username}}</i>&emsp;
+                        <span ng-show="friend.online" style="float: right">Online&emsp;</span>
+                        <span ng-hide="friend.online" style="float: right">Offline&emsp;</span>
+                    </div>
+                    
+                    <!-- Friend Requests -->
+                    <div ng-repeat="request in user.frJSON" class="sFR">
+                        <a href="/api/show/{{request.username}}">{{request.name}}</a> ({{request.email}}) 
+                        <button ng-click="use.addFriend(request.id)">Confirm</button> 
+                        <button ng-click="use.deleteRequest(request.id)">Delete</button>
+				    </div>
+                    
+                    <!-- Groups -->
+                    <div ng-repeat="group in user.gJSON" class="sGroups">
+                        <a href="/api/show/{{group.handle}}">{{group.name}} <i>@{{group.handle}}</i></a>
+                    </div>
+		          </div>
+            </div>
+	   <div id="main">
+            <div ui-view></div>
+	   </div>
+    </div>
+    <!--TEMPLATES-->
+    
+    <!--TEMPLATES END-->
+  </body>
 </html>

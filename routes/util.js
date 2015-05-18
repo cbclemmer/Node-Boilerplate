@@ -19,4 +19,7 @@ module.exports = function(app, controllers){
             }
         });
     });
+    app.get('/', function(req, res) {
+        res.render('index.html');
+    })
 }

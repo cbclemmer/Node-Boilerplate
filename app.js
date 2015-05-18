@@ -1,4 +1,4 @@
-var app = require("./bootstrap/express.js").app;
+var app = require("./express.js").app;
 
 var mongoose = require("mongoose");
 
