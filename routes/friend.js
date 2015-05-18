@@ -5,6 +5,24 @@ redis.on("error", function (err) {
 });
 
 module.exports = function(app, controllers){
+    app.get('/friend/get/:user/:page', function(req, res){
+        controllers.friend.get(req.params, {
+            success: function(friends){
+                res.json(friends);
+            }, error: function(error){
+                res.json({err: error});
+            }
+        });
+    });
+    app.get('/friend/getrequests/:user/:page', function(req, res) {
+        controllers.friend.getRequests(req.params, {
+            success: function(friends){
+                res.json(friends);
+            }, error: function(error){
+                res.json({err: error});
+            }
+        });
+    });
     app.get('/friend/getstate/:u1/:u2', function(req, res){
         controllers.friend.getState(req.params, {
             success: function(state){

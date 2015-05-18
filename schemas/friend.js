@@ -9,5 +9,6 @@ module.exports = new Schema({
         1: requested
         2: friends
     */
-    state: Number
+    state: Number,
+    createdOn: Date
 });

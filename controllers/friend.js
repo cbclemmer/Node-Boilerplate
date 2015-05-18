@@ -4,6 +4,38 @@ var schemas = require("../schemas/index.js");
 var Friend = mongoose.model('friend', schemas.friend);
 module.exports = {
     /*
+        description: gets friends from a specific user. if not specified it gets them from the currently logged in one
+        inputs:
+            user, page
+    */
+    get: function(inputs, exits){
+        var q = Friend.find({users: inputs.user, state: 2});
+        q.sort('-createdOn');
+        q.limit(20);
+        q.skip(inputs.page*20);
+        q.exec(function(err, friends){
+            if(err) throw err;
+            if(friends)
+                return exits.success(friends);
+            else
+                return exits.error("No friends");
+        });
+    },
+    
+    getRequests: function(inputs, exits){
+        var q = Friend.find({users: inputs.user, state: 1});
+        q.sort('-createdOn');
+        q.limit(20);
+        q.skip(inputs.page*20);
+        q.exec(function(err, friends){
+            if(err) throw err;
+            if(friends)
+                return exits.success(friends);
+            else
+                return exits.error("No friend requests");
+        });
+    },
+    /*
         description: tests the state of two users
             0: nothing
             1: request
@@ -35,7 +67,7 @@ module.exports = {
             if(friend){
                 return exits.error("Request already sent");
             }
-            var obj = {users: [inputs.user, inputs.request], requestTo: inputs.request, state: 1};
+            var obj = {users: [inputs.user, inputs.request], requestTo: inputs.request, state: 1, createdOn: (new Date())};
             (new Friend(obj)).save(function(err, friend){
                 if(err) throw err;
                 return exits.success(friend);
@@ -78,6 +110,7 @@ module.exports = {
                 return exits.error("Already friends");
             if(friend.requestTo==inputs.user){
                 friend.state = 2;
+                friend.createdOn = new Date();
                 friend.save(function(err, friend){
                     return exits.success(friend);
                 });
