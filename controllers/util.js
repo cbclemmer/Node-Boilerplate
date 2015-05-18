@@ -13,7 +13,7 @@ module.exports = {
     
     search: function(inputs, exits){
         var reg = new RegExp(inputs.query, 'i');
-        var q = User.find({$or: [{username: reg}, {email: reg}]}).select('username email name').limit(10);
+        var q = User.find({$or: [{username: reg}, {email: reg}]}).select('username email name').limit(10).sort('+username');
         q.exec(function(err, users){
             if(users){
                 for(var i=0;i<users.length;i++){
@@ -23,7 +23,6 @@ module.exports = {
             }else{
                 return exits.error("No users found");
             }
-            
         });
     }
 }

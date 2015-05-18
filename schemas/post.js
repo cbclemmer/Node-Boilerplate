@@ -11,6 +11,7 @@ module.exports = new Schema({
     target: String,
     //like 'likes'
     hearts: String,
+    content: String,
     public: Boolean,
     createdOn: Date,
     lastUpdated: Date
