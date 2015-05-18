@@ -1,0 +1,22 @@
+{
+  "name": "boiler-node",
+  "version": "1.0.0",
+  "description": "A single page app with social ",
+  "repository": "https://github.com/orbweaver-/boiler-node.git"
+  "main": "app.js",
+  "scripts": {
+    "test": "node app"
+  },
+  "author": "Colton Clemmer",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^0.8.3",
+    "ejs": "^2.3.1",
+    "express": "^4.12.3",
+    "marked": "^0.3.3",
+    "mongodb": "^2.0.31",
+    "mongoose": "^4.0.3",
+    "slug": "^0.9.1",
+    "validator": "^3.39.0"
+  }
+}
