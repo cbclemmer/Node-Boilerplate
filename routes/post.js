@@ -7,9 +7,8 @@ redis.on("error", function (err) {
 module.exports = function(app, controllers){
     app.post('/post/create', function(req, res){
         redis.get("user", function(err, user){
-            if(user){
             if(err) throw err;
-            
+            if(user){
                 var obj = req.query;
                 obj.content = req.get("post");
                 obj.user = user;

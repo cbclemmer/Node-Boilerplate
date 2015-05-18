@@ -42,8 +42,17 @@ module.exports = function(app, controllers){
                     }
                 });
             }else{
-                return res.json({err: "You are logged in", current: user});
+                return res.json({err: "You are logged in"});
             }
         });
     });
-}
+    app.post('/user/logout', function(req, res){
+        redis.get("user", function(err, user){
+            if(!user){
+                return res.json({err: "Not logged in"});
+            }
+            redis.del("user");
+            res.json({info: "Logged out successfully"});
+        });
+    });
+} 

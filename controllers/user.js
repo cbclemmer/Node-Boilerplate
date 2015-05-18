@@ -24,7 +24,7 @@ module.exports = {
         q.exec(function(err, user){
             if(err) throw err;
             if(user){
-                delete user.password;
+                user.password = undefined;
                 return exits.success(user);
             }
             return exits.error("User not found");
@@ -88,7 +88,7 @@ module.exports = {
                         nUser.confirmed = false;
                         (new User(nUser)).save(function(err, user){
                             if(err) throw err;
-                            delete user.password;
+                            user.password = undefined;
                             return exits.success(user);
                         });
                         
@@ -118,7 +118,7 @@ module.exports = {
                 bCrypt.compare(inputs.password, user.password, function(err, res){
                     if(err) throw err;
                     if(res){
-                        delete user.password;
+                        user.password = undefined;
                         return exits.success(user);
                     }else{
                         return exits.error("Password was incorrect");
@@ -128,5 +128,5 @@ module.exports = {
                 exits.error("Username or email not found");
             }
         });
-    }
+    },
 }

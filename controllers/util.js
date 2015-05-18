@@ -17,7 +17,7 @@ module.exports = {
         q.exec(function(err, users){
             if(users){
                 for(var i=0;i<users.length;i++){
-                    delete users[i].password;
+                    users[i].password = undefined;
                 }
                 return exits.success(users);
             }else{
