@@ -2,6 +2,7 @@ var mongoose = require("mongoose");
 var schemas = require("../schemas/index.js");
 
 var User = mongoose.model('user', schemas.user);
+var Post = mongoose.model('post', schemas.post);
 
 var objectID = require("mongodb").ObjectID;
 var bCrypt = require("bcrypt")
@@ -29,7 +30,32 @@ module.exports = {
             return exits.error("User not found");
         });
     },
-    
+    /*
+        description: gets the posts from the selected user
+            show all: friends or same as logged in
+            just public: not friends or not logged in
+        inputs: 
+            friends:    boolean whether they are friends or not
+            target:     The user ID that you are gettinmg the posts from
+            page:       for pagination the page number
+    */
+    getPosts: function(inputs, exits){
+        var q;
+        if(inputs.friends)
+            q = Post.find({owner: inputs.target});
+        else
+            q = Post.find({owner: inputs.target, public: true});
+        q.limit(15);
+        q.skip(inputs.page*15);
+        q.sort('-createdOn');
+        q.exec(function(err, posts){
+            if(err) throw err;
+            if(posts)
+                return exits.success(posts);
+            return exits.error("No posts found");
+        });
+    },
+
     /*
         inputs: 
             name, username, email, password, cpass
