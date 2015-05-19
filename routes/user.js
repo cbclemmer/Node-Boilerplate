@@ -63,11 +63,11 @@ module.exports = function(app, controllers){
         }
     });
     app.post('/user/logout', function(req, res){
-        redis.get("user", function(err, user){
-            if(!user){
+        redis.get(req.get('auth'), function(err, user){
+            if(err) throw err;
+            if(!user)
                 return res.json({err: "Not logged in"});
-            }
-            redis.del("user");
+            redis.del(req.get("auth"));
             res.json({info: "Logged out successfully"});
         });
     });
