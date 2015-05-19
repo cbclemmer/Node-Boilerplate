@@ -4,6 +4,16 @@ redis.on("error", function (err) {
     console.log("Error " + err);
 });
 
+//takes in an array and returns a new unique value
+function getunique(arr){
+    var s = require("random-string")({length: 20});
+    for(var i=0;i<arr.length;i++){
+        if(arr[i]==s)
+            getunique(arr);
+    }
+    return s;
+}
+
 module.exports = function(app, controllers){
     app.get('/user/getone/:query', function(req, res){
         controllers.user.getOne(req.params, {
@@ -37,11 +47,12 @@ module.exports = function(app, controllers){
         else if(auth=="login"){
             controllers.user.login(req.query, {
                 success: function(user){
-                    redis.get("next_AUTH", function(err, id){
-                        if(!id) id = 0;
-                        redis.set("next_AUTH", id++);
-                        redis.set(id, user._id);
-                        res.json({user: user, auth: id});
+                    redis.get("auths", function(err, auths){
+                        if(!auths) auths = [];
+                        auth = getunique(auths);
+                        redis.set("auths", auths);
+                        redis.set(auth, user._id);
+                        res.json({user: user, auth: auth});
                     });
                 }, error: function(error){
                     res.json({err: error});
