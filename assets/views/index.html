@@ -1,154 +1,178 @@
 <!DOCTYPE html>
-<html ng-app="app" >
-  <head>
-    <title>Your App Here!</title>
-
-    <!-- Viewport mobile tag for sensible mobile support -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
-    <!--STYLES-->
-    <link rel="stylesheet" href="/styles/importer.css">
-    <link rel="stylesheet" href="/styles/main.css">
-    <link rel="stylesheet" href="/styles/material.css">
-    <!--STYLES END-->
-  </head>
-
-  <body>
-    <!--SCRIPTS-->
-    <!--SCRIPTS END-->
-	<div ng-controller="userController as use">
-			<div id="err"></div>
-            <div id="info"></div>
-        <div class="top" ng-hide="user.name">
+<html>
+    <head>
+        <title>
+            Boiler
+        </title>
+        <link href="css/material.css" rel="stylesheet" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    </head>
+    <body ng-app="app" ng-controller="initController as init">
+        <script src="js/dependencies/jquery.js"></script>
+        <script src="js/dependencies/angular.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular-sanitize.min.js"></script>
+        <script src="js/angular/user.js"></script>
+        <script src="js/angular/app.js"></script>
+        <script src="js/material.js"></script>
+        
+        
+        <div class="top" ng-show="state=='login'">
             Boiler
         </div>
-        <div class="top loggedIn">
-			<button class="iconButton hamburger" id="menuButton"></button>
-			     <b>{{user.name}}</b> <i>@{{user.username}}</i>
-			<div id="aboutButton"><img src="images/details.png" class="notInline" /></div>
-			<div id="newPostButton">+</div>
-			&emsp;
-			<div class="topRight">
-				<input type="text" placeholder="Search..." id="search"/>
-				<img src="images/search.png" class="notInline search" id="searchButton"></img>
-			</div>
-		</div>
-      
-        <div id="searchResults" ng-controller="searchController as s">
-            <div ng-repeat="option in options" ng-click="s.getPage(option)">
-                <a href="/api/show/{{option.handle}}"><b>{{option.name}}</b> @{{option.handle}}</a>
-            </div>
-		</div>
-            <div id="newPost" ng-controller="postController as post">
-                Current: {{post.current}}
-    	       <form ng-submit="post.addObj()" enctype="multipart/form-data">
-        	       Type: <br>
-        	       <select ng-model="post.temp.objekts[post.current].type" id="pTypee" ng-change="post.an()">
-        	           <option value="short" selected="selected">Short</option>
-                        <option value="md">Mark Down</option>
-                        <option value="pic">Picture</option>
-        	       </select><br>
-                    <select ng-model="post.temp.vis">
-                        <option value="true">Public</option>
-                        <option value="false">Private</option>
-                    </select><br>
-                    <input type="text" placeholder="name" ng-model="post.temp.name" ng-show="post.temp.an"><br>
-        	       <!-- for short -->
-        	       <!--<textarea  id="shortText"></textarea><br>-->
-                    <textarea ng-model="post.temp.objekts[post.current].text" id="text-input" oninput="this.editor.update()"
-            rows="6" cols="60" ng-hide="post.temp.objekts[post.current].type=='pic'">Preview **Markdown** here.</textarea><br>
-                    <span ng-show="post.temp.objekts[post.current].type=='pic'">
-                        <input type="text" placeholder="name for picture(optional)" ng-model="post.picName">
-                        <input type="file" ng-file-select="onFileSelect($files)" name="picture" enctype="multipart/form-data">
-                    </span>
-                    <script>
-                        function Editor(input, preview) {
-                            this.update = function () {
-                            preview.innerHTML = markdown.toHTML(input.value);
-                            };
-                            input.editor = this;
-                            this.update();
-                        }
-                        var $i = function (id) { return document.getElementById(id); };
-                    </script>
-                </form>
-                <button ng-click="post.lastObj()">last part</button>
-                <button ng-click="post.addObj()">add part</button>
-                <button ng-click="post.create('')">Create Post</button>
-                <form ng-submit="post.addTag()">
-        	       <input type="text" placeholder="Add tag..." ng-model="post.tag" />
-                    <ul>
-                        <li ng-repeat="tag in post.tags">{{tag}}</li>
-                    </ul>
-                    </form>
-                    <h4>Preview</h4>
-                    <div ng-repeat="obj in post.temp.objekts">
-                    <h6>{{obj.type}}</h6>
-                    <span ng-show="obj.type=='short'||obj.type=='md'">{{obj.text}}</span>
-                    <span ng-show="obj.type=='pic'">
-                        <span ng-hide="obj.source.length">Empty</span>
-                        <span ng-show="obj.source.length">{{obj.source}}</span>
-                    </span>
-                    </div>
-                </form>
-                <div id="preview"></div>
-                <script>
-                    new Editor($i("text-input"), $i("preview"));
-                </script>
+        
+        
+        <div class="top" ng-hide="state=='login'">
+            <button class="iconButton hamburger" id="menuButton"></button>
+            {{user.name}} @{{user.username}}
+            <div id="aboutButton"><img src="icons/details.png" class="notInline" /></div>
+            <div id="newPostButton">+</div>
+            &emsp;
+            <div class="topRight">
+                <input type="text" placeholder="Search..." id="searchBar"/>
+                <img src="icons/search.png" class="notInline search" id="search"></img>
             </div>
         </div>
-        <div id="aboutDiv">
-            <div class="aboutDivOption" id="aboutGroups">Groups</div>
-			<div class="aboutDivOption" id="aboutFriends">Friends</div>
-            <div class="aboutDivOption" id="aboutFR">Friend Requests</div>
-		</div>
-		<div id="shadow"></div>
-		<div id="sideNav" ng-controller="userController as use">
-			<ul>
-				<li><img src="images/home.png" class="notInline">&emsp;<a href="/api/show/{{option.handle}}">@{{user.username}}</a></li>
-                <li><a ui-sref="feed"><img src="images/feed.png" class="notInline">&emsp;Feed</a></li>
-                <li><a ui-sref="settings"><img src="images/settings.png" class="notInline">&emsp;Settings</a></li>
-                <li><a ui-sref="messages"><img src="images/messages.png" class="notInline">&emsp;Messages</a></li>
-				<li ng-click="use.logOut()"><img src="images/logout.png" class="notInline">&emsp;Logout</a></li>
-			</ul>
-		</div>
-		<div id="friendsDiv">
-				<div class="optionTop">
-					<span id="friendsExit">X</span>
-					
-                    <h1 class="sFriends">Friends</h1>
-                    <h1 class="sFR">Fried Requests</h1>
-                    <h1 class="sGroups">Groups</h1>
-                    
-					<input class="sFriends" type="text" placeholder="Search for Friends" id="friendsSearch"/>
-				</div>
-				<div id="friendsResults">
-                    <!-- Friends -->
-					<div ng-repeat="friend in user.fJSON" class="sFriends">
-                        <a href="/api/show/{{friend.username}}"> {{friend.name}}</a> <i>@{{friend.username}}</i>&emsp;
-                        <span ng-show="friend.online" style="float: right">Online&emsp;</span>
-                        <span ng-hide="friend.online" style="float: right">Offline&emsp;</span>
+        <div id="searchResults">
+            <div>name <span>@username</span></div>
+            <div>name <span>@username</span></div>
+            <div>name <span>@username</span></div>
+        </div>
+        <div id="err"></div>
+        <div id="info"></div>
+        <!-- 
+        ##########################################################
+                                    Login
+        ##########################################################
+        -->
+        <div class="login" ng-controller="userController as userCtl" ng-show="state=='login'">
+            <div class="login-screen">
+                <div class="app-title">
+                    <h1><span class="sLogin">Login</span><span class="sSign-up">Register</span></h1>
+                </div>
+                <form class="sLogin" ng-submit="userCtl.login(userCtl.login.un, userCtl.login.password)">
+                    <div class="control-group">
+                        <input type="text" class="login-field" value="" placeholder="email or username" id="login-email" ng-model="userCtl.login.un">
+                        <label class="login-field-icon fui-user" for="login-email"></label>
                     </div>
-                    
-                    <!-- Friend Requests -->
-                    <div ng-repeat="request in user.frJSON" class="sFR">
-                        <a href="/api/show/{{request.username}}">{{request.name}}</a> ({{request.email}}) 
-                        <button ng-click="use.addFriend(request.id)">Confirm</button> 
-                        <button ng-click="use.deleteRequest(request.id)">Delete</button>
-				    </div>
-                    
-                    <!-- Groups -->
-                    <div ng-repeat="group in user.gJSON" class="sGroups">
-                        <a href="/api/show/{{group.handle}}">{{group.name}} <i>@{{group.handle}}</i></a>
+                <div class="control-group">
+                    <input type="password" class="login-field" value="" placeholder="password" id="login-pass" ng-model="userCtl.login.password">
+                    <label class="login-field-icon fui-lock" for="login-pass"></label>
+                </div>
+                <input type="submit" class="btn btn-primary btn-large btn-block" value="login">
+                </form>
+                <!-- Sign up form -->
+                <form class="sSign-up">
+                    <div class="control-group">
+                        <input type="text" class="login-field" value="" placeholder="email" id="login-sEmail">
+                        <label class="login-field-icon fui-user" for="login-email"></label>
                     </div>
-		          </div>
+            
+                    <div class="control-group">
+                        <input type="text" class="login-field" value="" placeholder="name" id="login-sName">
+                        <label class="login-field-icon fui-user" for="login-email"></label>
+                    </div>
+            
+                    <div class="control-group">
+                        <input type="text" class="login-field" value="" placeholder="username" id="login-sUser">
+                        <label class="login-field-icon fui-user" for="login-email"></label>
+                    </div>
+                
+                    <div class="control-group">
+                        <input type="password" class="login-field" value="" placeholder="password" id="login-sPass">
+                        <label class="login-field-icon fui-user" for="login-email"></label>
+                    </div>
+                
+                    <div class="control-group">
+                        <input type="password" class="login-field" value="" placeholder="confirm password" id="login-sCpass">
+                        <label class="login-field-icon fui-user" for="login-email"></label>
+                    </div>
+                    <input type="submit" class="btn btn-primary btn-large btn-block" value="Register">
+                </form><br>
+        
+                <span style="color: blue;cursor: pointer;text-align: center">
+                    <span class="sSign-up" id="login-button">Login</span>
+                    <span class="sLogin" id="signUp-button">Register</span>
+                </span>
+                <a class="login-link" href="#">Lost your password?</a><br>
             </div>
-	   <div id="main">
-            <div ui-view></div>
-	   </div>
-    </div>
-    <!--TEMPLATES-->
-    
-    <!--TEMPLATES END-->
-  </body>
+        </div>
+        
+        <!-- 
+        ##########################################################
+                                Logged In
+        ##########################################################
+        -->
+        <div ng-show="state!='login'">
+            <div id="newPost">
+                <textarea placeholder="Write to @username"></textarea>
+            </div>
+            <div id="aboutDiv">
+                <div class="aboutDivOption" id="aboutFriends">Friends</div>
+            </div>
+            <div id="shadow"></div>
+            <div id="sideNav">
+                <ul>
+                    <li><img src="icons/home.png" class="notInline">&emsp;Home</li>
+                    <li><img src="icons/feed.png" class="notInline">&emsp;Feed</li>
+                    <li ng-controller="userController as userCtl" ng-click="userCtl.logout()"><img src="icons/logout.png" class="notInline">&emsp;Logout</li>
+                </ul>
+            </div>
+            <div id="friendsDiv">
+                <div class="optionTop">
+                    <span id="friendsExit">X</span>
+                    <h1>Friends</h1>
+                    <input type="text" placeholder="Search for Friends" id="friendsSearch"/>
+                </div>
+                <div id="friendsResults">
+                    <div>name <span>@username</span></div>
+                    <div>name <span>@username</span></div>
+                    <div>name <span>@username</span></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 
+        ##########################################################
+                                    User
+        ##########################################################
+        -->
+        <div ng-show="state=='user'">
+            <div class="posts">
+                <div class="post">
+                    <div class="postTop"><b>Name</b> <span>@username</span><img src="icons/visable-black.png" class="notInline postVis" /></div><br>
+                    <div class="postContent">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vel dapibus felis. Maecenas faucibus, nunc vitae vehicula imperdiet, odio nibh cursus velit, nec dignissim ex nulla ut ligula. Sed pharetra vitae dui id feugiat. Curabitur nec lobortis magna, sed maximus leo. Nunc risus massa, egestas quis nibh et, ullamcorper dictum dolor. Fusce sit amet tellus eu lectus finibus sodales. Aliquam a sapien non quam ornare hendrerit quis vel odio. Cras varius lacus tristique, tristique lacus id, dapibus erat. Aliquam sed vulputate nunc, nec fermentum turpis. Donec rhoncus vulputate eros id ornare. Donec venenatis ipsum quam, sed bibendum tellus vulputate sed. Donec vestibulum diam nibh, vitae dapibus massa vehicula in. Aliquam imperdiet viverra enim, in eleifend dui efficitur ac. Suspendisse varius orci eu sollicitudin dignissim. In sed eleifend nulla, at venenatis erat. Phasellus faucibus, nisi ut sodales dignissim, libero velit imperdiet nisl, aliquam consectetur sem massa vitae turpis.</div>
+                </div>
+                <div class="post">
+                    <div class="postTop"><b>Name</b> <span>@username</span><img src="icons/visable-black.png" class="notInline postVis" /></div><br>
+                    <div class="postContent">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vel dapibus felis. Maecenas faucibus, nunc vitae vehicula imperdiet, odio nibh cursus velit, nec dignissim ex nulla ut ligula. Sed pharetra vitae dui id feugiat. Curabitur nec lobortis magna, sed maximus leo. Nunc risus massa, egestas quis nibh et, ullamcorper dictum dolor. Fusce sit amet tellus eu lectus finibus sodales. Aliquam a sapien non quam ornare hendrerit quis vel odio. Cras varius lacus tristique, tristique lacus id, dapibus erat. Aliquam sed vulputate nunc, nec fermentum turpis. Donec rhoncus vulputate eros id ornare. Donec venenatis ipsum quam, sed bibendum tellus vulputate sed. Donec vestibulum diam nibh, vitae dapibus massa vehicula in. Aliquam imperdiet viverra enim, in eleifend dui efficitur ac. Suspendisse varius orci eu sollicitudin dignissim. In sed eleifend nulla, at venenatis erat. Phasellus faucibus, nisi ut sodales dignissim, libero velit imperdiet nisl, aliquam consectetur sem massa vitae turpis.</div>
+                </div>
+                <div class="post">
+                    <div class="postTop"><b>Name</b> <span>@username</span><img src="icons/visable-black.png" class="notInline postVis" /></div><br>
+                    <div class="postContent">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vel dapibus felis. Maecenas faucibus, nunc vitae vehicula imperdiet, odio nibh cursus velit, nec dignissim ex nulla ut ligula. Sed pharetra vitae dui id feugiat. Curabitur nec lobortis magna, sed maximus leo. Nunc risus massa, egestas quis nibh et, ullamcorper dictum dolor. Fusce sit amet tellus eu lectus finibus sodales. Aliquam a sapien non quam ornare hendrerit quis vel odio. Cras varius lacus tristique, tristique lacus id, dapibus erat. Aliquam sed vulputate nunc, nec fermentum turpis. Donec rhoncus vulputate eros id ornare. Donec venenatis ipsum quam, sed bibendum tellus vulputate sed. Donec vestibulum diam nibh, vitae dapibus massa vehicula in. Aliquam imperdiet viverra enim, in eleifend dui efficitur ac. Suspendisse varius orci eu sollicitudin dignissim. In sed eleifend nulla, at venenatis erat. Phasellus faucibus, nisi ut sodales dignissim, libero velit imperdiet nisl, aliquam consectetur sem massa vitae turpis.</div>
+                </div>
+                <div class="post">
+                    <div class="postTop"><b>Name</b> <span>@username</span><img src="icons/visable-black.png" class="notInline postVis" /></div><br>
+                    <div class="postContent">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vel dapibus felis. Maecenas faucibus, nunc vitae vehicula imperdiet, odio nibh cursus velit, nec dignissim ex nulla ut ligula. Sed pharetra vitae dui id feugiat. Curabitur nec lobortis magna, sed maximus leo. Nunc risus massa, egestas quis nibh et, ullamcorper dictum dolor. Fusce sit amet tellus eu lectus finibus sodales. Aliquam a sapien non quam ornare hendrerit quis vel odio. Cras varius lacus tristique, tristique lacus id, dapibus erat. Aliquam sed vulputate nunc, nec fermentum turpis. Donec rhoncus vulputate eros id ornare. Donec venenatis ipsum quam, sed bibendum tellus vulputate sed. Donec vestibulum diam nibh, vitae dapibus massa vehicula in. Aliquam imperdiet viverra enim, in eleifend dui efficitur ac. Suspendisse varius orci eu sollicitudin dignissim. In sed eleifend nulla, at venenatis erat. Phasellus faucibus, nisi ut sodales dignissim, libero velit imperdiet nisl, aliquam consectetur sem massa vitae turpis.</div>
+                </div>
+            </div>
+        </div>
+    </body>
 </html>
+    <!--SCRIPTS END-->
+    <!-- <div ng-controller="userController as userCtl" ng-show="state=='login'">
+        <form ng-submit="userCtl.login(userCtl.un, userCtl.password)">
+            <h3>Login</h3>
+            <input type="text" placeholder="Username or email" ng-model="userCtl.un" /><br>
+            <input type="password" placeholder="Password" ng-model="userCtl.password" /><br>
+            <input type="submit" value="submit" /><br>
+            <span ng-click=""></span>
+        </form>
+        <form ng-submit="userCtl.login(userCtl.un, userCtl.password)">
+            <h3>Register</h3>
+            <input type="text" placeholder="name" ng-model="userCtl.name" /><br>
+            <input type="password" placeholder="Password" ng-model="userCtl.password" /><br>
+            <input type="submit" value="submit" /><br>
+            <span ng-click=""></span>
+        </form>
+    </div>
+  </body> -->

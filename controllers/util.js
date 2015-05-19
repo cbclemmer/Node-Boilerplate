@@ -24,5 +24,14 @@ module.exports = {
                 return exits.error("No users found");
             }
         });
+    },
+    
+    status: function(inputs, exits){
+        User.findOne({_id: inputs.user}, function(err, user){
+            if(err) throw err;
+            if(!user)
+                return exits.error("Could not find user");
+            return exits.success(user);
+        });
     }
 }
