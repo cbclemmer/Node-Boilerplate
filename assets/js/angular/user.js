@@ -14,8 +14,17 @@
             });
         }
         this.register = function(obj){
-            h.post("/user/create", obj).success(function(data){
-                
+            var s = "/user/create?";
+            for(var keys in obj){
+                s += keys + "=" + obj[keys] + "&";
+            }
+            h.post(s).success(function(data){
+                if(data.err)
+                    return showErr(data.err);
+                showinfo("Registration successful");
+                rs.user = data;
+                rs.state = "home";
+                window.location.hash = "home"
             });
         }
         this.logout = function(){

@@ -61,29 +61,29 @@
                 <input type="submit" class="btn btn-primary btn-large btn-block" value="login">
                 </form>
                 <!-- Sign up form -->
-                <form class="sSign-up">
+                <form class="sSign-up" ng-submit="userCtl.register(userCtl.reg)">
                     <div class="control-group">
-                        <input type="text" class="login-field" value="" placeholder="email" id="login-sEmail">
+                        <input type="text" class="login-field" value="" placeholder="email" id="login-sEmail" ng-model="userCtl.reg.email">
                         <label class="login-field-icon fui-user" for="login-email"></label>
                     </div>
             
                     <div class="control-group">
-                        <input type="text" class="login-field" value="" placeholder="name" id="login-sName">
+                        <input type="text" class="login-field" value="" placeholder="name" id="login-sName" ng-model="userCtl.reg.name">
                         <label class="login-field-icon fui-user" for="login-email"></label>
                     </div>
             
                     <div class="control-group">
-                        <input type="text" class="login-field" value="" placeholder="username" id="login-sUser">
+                        <input type="text" class="login-field" value="" placeholder="username" id="login-sUser" ng-model="userCtl.reg.username">
                         <label class="login-field-icon fui-user" for="login-email"></label>
                     </div>
                 
                     <div class="control-group">
-                        <input type="password" class="login-field" value="" placeholder="password" id="login-sPass">
+                        <input type="password" class="login-field" value="" placeholder="password" id="login-sPass" ng-model="userCtl.reg.password">
                         <label class="login-field-icon fui-user" for="login-email"></label>
                     </div>
                 
                     <div class="control-group">
-                        <input type="password" class="login-field" value="" placeholder="confirm password" id="login-sCpass">
+                        <input type="password" class="login-field" value="" placeholder="confirm password" id="login-sCpass" ng-model="userCtl.reg.cpass">
                         <label class="login-field-icon fui-user" for="login-email"></label>
                     </div>
                     <input type="submit" class="btn btn-primary btn-large btn-block" value="Register">
