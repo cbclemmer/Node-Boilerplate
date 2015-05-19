@@ -12,7 +12,7 @@ module.exports = function(app, controllers){
                 var obj = req.query;
                 obj.target = req.params.target;
                 obj.owner = user;
-                obj.content = req.get("post");
+                obj.content = req.body.post;
                 controllers.post.create(obj, {
                     success: function(post){
                         res.json(post);

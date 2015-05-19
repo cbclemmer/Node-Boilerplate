@@ -31,7 +31,6 @@ module.exports = {
                         if((new RegExp(inputs.query)).test(users[i].username))
                             f.push(users[i]);
                     }
-                    
                     return exits.success(f);
                 });
             }else{

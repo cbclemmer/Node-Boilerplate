@@ -1,3 +1,5 @@
+var converter = new Showdown.converter();
+
 function showErr(error){
 	$('#err').css({top: '-200px'});
 	$('#err').empty();
@@ -97,12 +99,20 @@ $(document).ready(function(){
 			$("#searchResults").slideUp();
 		}
 	});
+	$("#postInput textarea").keyup(function(){
+    		$("#preview").empty();
+    		$("#preview").append(converter.makeHtml($("#postInput textarea").val()));
+	});
 	$("#newPostButton").click(function(){
 		if($("#newPost").is(":visible")) {
 			$("#newPostButton").rotate(0);
 			$("#newPost").slideUp();
 		}else{
 			$("#newPostButton").rotate(45);
+			var height = $(window).height();
+			$("#postInput").css({height: height*.5});
+			$("#preview").css({height: height*.5});
+			$("#postInput textarea").css({height: height*.5});
 			$("#newPost").slideDown();
 		}
 	});

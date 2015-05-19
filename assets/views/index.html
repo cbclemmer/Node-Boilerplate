@@ -9,8 +9,10 @@
     </head>
     <body ng-app="app" ng-controller="initController as init">
         <script src="js/dependencies/jquery.js"></script>
+        <script src="js/dependencies/showdown.js"></script>
         <script src="js/dependencies/angular.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular-sanitize.min.js"></script>
+        <script src="js/angular/post.js"></script>
         <script src="js/angular/friend.js"></script>
         <script src="js/angular/user.js"></script>
         <script src="js/angular/app.js"></script>
@@ -100,8 +102,13 @@
         ##########################################################
         -->
         <div ng-show="state!='login'">
-            <div id="newPost">
-                <textarea placeholder="Write to @username"></textarea>
+            <div id="newPost" ng-controller="postController as postCtl">
+                <form id="postInput" ng-submit="postCtl.create(postCtl.post)">
+                    <input type="text" placeholder="Title" ng-model="postCtl.post.title">
+                    <textarea placeholder="Write a new post" ng-model="postCtl.post.content"></textarea>
+                    <input type="submit" id="postButton" value="Post">
+                </form>
+                <div id="preview"></div>
             </div>
             <div id="aboutDiv">
                 <div class="aboutDivOption" id="aboutFriends" ng-controller="friendController as friendCtl" ng-click="friendCtl.get(0)">Friends</div>
@@ -153,21 +160,3 @@
         </div>
     </body>
 </html>
-    <!--SCRIPTS END-->
-    <!-- <div ng-controller="userController as userCtl" ng-show="state=='login'">
-        <form ng-submit="userCtl.login(userCtl.un, userCtl.password)">
-            <h3>Login</h3>
-            <input type="text" placeholder="Username or email" ng-model="userCtl.un" /><br>
-            <input type="password" placeholder="Password" ng-model="userCtl.password" /><br>
-            <input type="submit" value="submit" /><br>
-            <span ng-click=""></span>
-        </form>
-        <form ng-submit="userCtl.login(userCtl.un, userCtl.password)">
-            <h3>Register</h3>
-            <input type="text" placeholder="name" ng-model="userCtl.name" /><br>
-            <input type="password" placeholder="Password" ng-model="userCtl.password" /><br>
-            <input type="submit" value="submit" /><br>
-            <span ng-click=""></span>
-        </form>
-    </div>
-  </body> -->

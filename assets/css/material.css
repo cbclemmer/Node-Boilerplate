@@ -179,7 +179,6 @@ input[type="text"]:focus {
 }
 #newPost {
 	width: 80%;
-	height: 200px;
 	margin-left: 10%;
 	position: fixed;	
 	background-color: white;
@@ -187,18 +186,24 @@ input[type="text"]:focus {
 	display: none;
 	z-index: 8;
 }
-#newPost textarea {
-	border: 0;
-	width: 90%;
-	height: 185px;
+#postInput {
+	display: inline-table;
+	width: 40%;
 	margin-left: 5%;
+	font-family: Roboto;
+	font-size: 25pt;
+}
+#postInput textarea {
+	border: 0;
+	width: 100%;
+	height: 185px;
 	margin-top: 15px;
 	font-size: 20px;
 	font-family: Crimson;
 	line-height: 1.4;
 	resize: none;
 }
-#newPost textarea:focus {
+#postInput textarea:focus {
 	outline: 0;
 }
 #newPostButton {
@@ -208,6 +213,37 @@ input[type="text"]:focus {
 	font-size: 34pt;
 	cursor: pointer;
 }
+
+#postButton {
+	width: 30%;
+	height: 50px;
+	border: 0px;
+	background-color: #2196F3;
+	color: white;
+	font-family: Roboto;
+	font-size: 20pt;
+	margin-bottom: 30px;
+	border-radius: 3px;
+	opacity: .9;
+	cursor: pointer;
+}
+
+#postButton:hover {
+	opacity: 1;
+}
+
+#preview {
+	display: inline;
+	width: 45%;
+	height: 300px;
+	margin-right: 5%;
+	margin-top: 25px;
+	font-family: Crimson;
+	float: right;
+	overflow-y: scroll;
+}
+
+
 #aboutButton {
 	display: inline-block;
 }
