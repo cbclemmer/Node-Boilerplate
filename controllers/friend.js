@@ -2,7 +2,45 @@ var mongoose = require("mongoose");
 var schemas = require("../schemas/index.js");
 
 var Friend = mongoose.model('friend', schemas.friend);
+var User = mongoose.model('user', schemas.user);
+
 module.exports = {
+    /*
+        description: gets a list of friends from a search string
+        inputs:
+            user: the current user's ID
+            query: the query to look up
+    */
+    searchFriends: function(inputs, exits){
+        Friend.find({users: inputs.user}, function(err, friends){
+            if(err) throw err;
+            if(friends){
+                //get an array of friend IDs
+                var f = [];
+                for(var i=0;i<friends.length;i++){
+                    if(friends[i].users[0]==inputs.user)
+                        f.push(friends[i].users[0]);
+                    else
+                        f.push(friends[i].users[1]);
+                }
+                User.find({_id: {$in: f}}, 'name username email', function(err, users){
+                    if(err) throw err;
+                    //pick only the ones that match the criteria
+                    var f = [];
+                    for(var i=0;i<users.length;i++){
+                        if((new RegExp(inputs.query)).test(users[i].username))
+                            f.push(users[i]);
+                    }
+                    
+                    return exits.success(f);
+                });
+            }else{
+                return exits.error("Friends not found");
+            }
+            
+        });
+    },
+    
     /*
         description: gets friends from a specific user. if not specified it gets them from the currently logged in one
         inputs:
@@ -21,6 +59,7 @@ module.exports = {
                 return exits.error("No friends");
         });
     },
+    
     
     getRequests: function(inputs, exits){
         var q = Friend.find({users: inputs.user, state: 1});
