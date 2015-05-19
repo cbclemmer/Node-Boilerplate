@@ -68,6 +68,7 @@ $(document).ready(function(){
 		}else{
 			$("#searchBar").show();
 			$("#searchBar").animate({top: "0px"}, 500);
+			$("#searchBar").focus();
 		}
 	});
 	$("#menuButton").click(function(){
@@ -84,6 +85,12 @@ $(document).ready(function(){
 		});
 	});
 	$("#searchBar").keyup(function(){
+		$.get('/search/'+$("#searchBar").val(), function(data){
+			$("#searchResults").empty();
+			for(var i=0;i<data.length;i++){
+				$("#searchResults").append("<div>"+data[i].name+" <span>@"+data[i].username+"</span></div>");
+			}	
+		});
 		if($("#searchBar").val()!=""){
 			$("#searchResults").slideDown();
 		}else{
@@ -133,6 +140,9 @@ $(document).ready(function(){
 		}
 		if($("#info").is(":visible")){
 			$("#info").fadeOut('fast');
+		}
+		if($("#searchResults").is(":visible")){
+			$("#searchResults").slideUp();
 		}
 	});
 });

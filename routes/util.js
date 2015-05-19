@@ -15,7 +15,7 @@ module.exports = function(app, controllers){
     app.get("/search/:query", function(req, res){
         controllers.util.search(req.params, {
             success: function(users){
-                res.json({users: users});
+                res.json(users);
             }
         });
     });

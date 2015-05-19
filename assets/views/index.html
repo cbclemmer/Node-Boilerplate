@@ -11,6 +11,7 @@
         <script src="js/dependencies/jquery.js"></script>
         <script src="js/dependencies/angular.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular-sanitize.min.js"></script>
+        <script src="js/angular/friend.js"></script>
         <script src="js/angular/user.js"></script>
         <script src="js/angular/app.js"></script>
         <script src="js/material.js"></script>
@@ -32,11 +33,7 @@
                 <img src="icons/search.png" class="notInline search" id="search"></img>
             </div>
         </div>
-        <div id="searchResults">
-            <div>name <span>@username</span></div>
-            <div>name <span>@username</span></div>
-            <div>name <span>@username</span></div>
-        </div>
+        <div id="searchResults"></div>
         <div id="err"></div>
         <div id="info"></div>
         <!-- 
@@ -107,7 +104,7 @@
                 <textarea placeholder="Write to @username"></textarea>
             </div>
             <div id="aboutDiv">
-                <div class="aboutDivOption" id="aboutFriends">Friends</div>
+                <div class="aboutDivOption" id="aboutFriends" ng-controller="friendController as friendCtl" ng-click="friendCtl.get(0)">Friends</div>
             </div>
             <div id="shadow"></div>
             <div id="sideNav">
@@ -117,16 +114,14 @@
                     <li ng-controller="userController as userCtl" ng-click="userCtl.logout()"><img src="icons/logout.png" class="notInline">&emsp;Logout</li>
                 </ul>
             </div>
-            <div id="friendsDiv">
+            <div id="friendsDiv" ng-controller="friendController as friendCtl">
                 <div class="optionTop">
                     <span id="friendsExit">X</span>
                     <h1>Friends</h1>
                     <input type="text" placeholder="Search for Friends" id="friendsSearch"/>
                 </div>
                 <div id="friendsResults">
-                    <div>name <span>@username</span></div>
-                    <div>name <span>@username</span></div>
-                    <div>name <span>@username</span></div>
+                    <div ng-repeat="friend in user.friends">{{friend.name}} <span>@{{friend.username}}</span></div>
                 </div>
             </div>
         </div>

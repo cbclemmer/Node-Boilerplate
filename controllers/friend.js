@@ -40,7 +40,7 @@ module.exports = {
             
         });
     },
-    
+     
     /*
         description: gets friends from a specific user. if not specified it gets them from the currently logged in one
         inputs:
@@ -53,10 +53,23 @@ module.exports = {
         q.skip(inputs.page*20);
         q.exec(function(err, friends){
             if(err) throw err;
-            if(friends)
-                return exits.success(friends);
-            else
-                return exits.error("No friends");
+            var f = [];
+            for(var i=0;i<friends.length;i++){
+                if(friends[i].users[0]==inputs.user)
+                    f.push(friends[i].users[0]);
+                else
+                    f.push(friends[i].users[1]);
+            }
+            User.find({_id: {$in: f}}, 'name username email', function(err, users){
+                if(err) throw err;
+                //pick only the ones that match the criteria
+                var f = [];
+                for(var i=0;i<users.length;i++){
+                    if((new RegExp(inputs.query)).test(users[i].username))
+                        f.push(users[i]);
+                }
+                return exits.success(f);
+            });
         });
     },
     
