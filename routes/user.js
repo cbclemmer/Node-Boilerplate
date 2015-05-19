@@ -25,20 +25,26 @@ module.exports = function(app, controllers){
         })
     });
     app.post('/user/create', function(req, res){
-        redis.get("user", function(err, user){
-            if(!user){
+        var auth = req.get('auth');
+        if(!auth)
+            return res.json({err: "Invalid format"});
+        else if(auth=="login"){
                 controllers.user.create(req.query, {
                     success: function(user){
-                        redis.set('user', user._id);
-                        res.json(user);
+                        redis.get("auths", function(err, auths){
+                        if(!auths) auths = [];
+                            auth = getunique(auths);
+                            redis.set("auths", auths);
+                            redis.set(auth, user._id);
+                            res.json({user: user, auth: auth});
+                        });
                     },error: function(error){
                         res.json({err: error});
                     }
                 });
-            }else{
-                return res.json({err: "You are logged in"});
-            }
-        })
+        }else{
+            return res.json({err: "You are logged in"});
+        }
     });
     app.post('/user/login', function(req, res){
         var auth = req.get("auth");
@@ -71,4 +77,4 @@ module.exports = function(app, controllers){
             res.json({info: "Logged out successfully"});
         });
     });
-} 
+}
