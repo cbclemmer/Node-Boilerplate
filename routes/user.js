@@ -29,19 +29,19 @@ module.exports = function(app, controllers){
         if(!auth)
             return res.json({err: "Invalid format"});
         else if(auth=="login"){
-                controllers.user.create(req.query, {
-                    success: function(user){
-                        redis.get("auths", function(err, auths){
-                        if(!auths) auths = [];
-                            auth = getunique(auths);
-                            redis.set("auths", auths);
-                            redis.set(auth, user._id);
-                            res.json({user: user, auth: auth});
-                        });
+            controllers.user.create(req.query, {
+                success: function(user){
+                    redis.get("auths", function(err, auths){
+                    if(!auths) auths = [];
+                        auth = getunique(auths);
+                        redis.set("auths", auths);
+                        redis.set(auth, user._id);
+                        res.json({user: user, auth: auth});
+                    });
                     },error: function(error){
-                        res.json({err: error});
-                    }
-                });
+                    res.json({err: error});
+                }
+            });
         }else{
             return res.json({err: "You are logged in"});
         }

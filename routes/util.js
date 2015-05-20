@@ -20,7 +20,7 @@ module.exports = function(app, controllers){
         });
     });
     app.get('/status', function(req, res){
-        redis.get("user", function(err, user){
+        redis.get(req.get("auth"), function(err, user){
             if(user){
                 controllers.util.status({user: user}, {
                     success: function(user){
@@ -35,9 +35,6 @@ module.exports = function(app, controllers){
             
         });
     });
-    app.get('/pages/:page', function(req, res){
-        res.render(req.params.page+".html");
-    })
     app.get('/', function(req, res) {
         res.render('index.html');
     });

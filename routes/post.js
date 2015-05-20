@@ -6,7 +6,7 @@ redis.on("error", function (err) {
 
 module.exports = function(app, controllers){
     app.post('/post/create/:target', function(req, res){
-        redis.get("user", function(err, user){
+        redis.get(req.get("auth"), function(err, user) {
             if(err) throw err;
             if(user){
                 var obj = req.query;
@@ -27,7 +27,7 @@ module.exports = function(app, controllers){
         });
     });
     app.post('/post/edit/:post', function(req, res){
-        redis.get("user", function(err, user){
+        redis.get(req.get("auth"), function(err, user) {
             if(err) throw err;
             if(!user)
                 return res.json({err: "Not logged in"});
@@ -45,7 +45,7 @@ module.exports = function(app, controllers){
         });
     });
     app.post('/post/remove/:post', function(req, res){
-        redis.get('user', function(err, user){
+        redis.get(req.get("auth"), function(err, user) {
             if(err) throw err;
             if(!user)
                 return res.json({err: "Not logged in"});
