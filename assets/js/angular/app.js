@@ -12,10 +12,8 @@
                 rs.user = data;
                 if(window.location.hash == "#feed"){
                     rs.state = "feed";
-                    window.location.hash = "feed";
                 }else if (window.location.hash == "#home"){
                     rs.state = "home";
-                    window.location.hash = "home";
                     rs.pag = rs.user;
                     rs.pag.friends = 3;
                     h.get("/user/getposts/1/"+rs.user._id).success(function(data){
@@ -23,10 +21,15 @@
                             return showErr(data.err);
                         rs.pag.posts = data;
                     });
-                }else{
-                    rs.user = data;
-                    rs.state = "feed";
-                    window.location.hash = "feed";
+                }else if(window.location.hash.search("@") != -1){
+                    if(window.location.hash.split("/")[2].split("-")[window.location.hash.split("/")[2].split("-").length-1]){
+                        rs.state = "post";
+                        h.get("/post/get/"+window.location.hash.split("/")[2].split("-")[window.location.hash.split("/")[2].split("-").length-1]).success(function(data){
+                            if(data.err) return showErr(data.err);
+                            rs.pag = {}
+                            rs.pag.content = data;
+                        });
+                    }
                 }
             }else{
                 rs.state = "login";
