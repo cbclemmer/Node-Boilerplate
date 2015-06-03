@@ -20,16 +20,14 @@
             });
         }
         this.register = function(obj){
-            var s = "/user/create?";
-            for(var keys in obj){
-                s += keys + "=" + obj[keys] + "&";
-            }
-            h.post(s, {}, config).success(function(data){
+            h.post("/user/create", obj).success(function(data){
                 if(data.err)
                     return showErr(data.err);
                 showinfo("Registration successful");
-                rs.user = data;
+                rs.user = data.user;
+                config.headers.auth = data.auth;
                 rs.state = "home";
+                document.cookie = "auth="+data.auth;
                 window.location.hash = "home"
             });
         }

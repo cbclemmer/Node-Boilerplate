@@ -29,7 +29,7 @@ module.exports = function(app, controllers){
         if(!auth)
             return res.json({err: "Invalid format"});
         else if(auth=="login"){
-            controllers.user.create(req.query, {
+            controllers.user.create(req.body, {
                 success: function(user){
                     redis.get("auths", function(err, auths){
                     if(!auths) auths = [];
