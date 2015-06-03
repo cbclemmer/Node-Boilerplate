@@ -11,7 +11,7 @@
             h.post("/user/login", obj).success(function(data){
                 if(data.err)
                     return showErr(data.err);
-                showinfo("Logged in");
+                showInfo("Logged in");
                 rs.user = data.user;
                 config.headers.auth = data.auth;
                 rs.state = "home";
@@ -23,7 +23,7 @@
             h.post("/user/create", obj).success(function(data){
                 if(data.err)
                     return showErr(data.err);
-                showinfo("Registration successful");
+                showInfo("Registration successful");
                 rs.user = data.user;
                 config.headers.auth = data.auth;
                 rs.state = "home";
@@ -37,7 +37,7 @@
                 rs.state = "login";
                 h.defaults.headers.common.auth = "login";
                 document.cookie = "auth=login"
-                showinfo("Logged out");
+                showInfo("Logged out");
             });
         }
     }]);

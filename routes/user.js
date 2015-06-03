@@ -77,4 +77,23 @@ module.exports = function(app, controllers){
             res.json({info: "Logged out successfully"});
         });
     });
+    app.get("/user/getposts/:page/:user", function(req, res){
+        redis.get(req.get('auth'), function(err, user){
+            controllers.friend.getState({u1: user, u2: req.params.user}, {
+                success: function(state){
+                    if (user==req.params.user || state == 2)
+                        state = true;
+                    else
+                        state = false;
+                    controllers.user.getPosts({friends: state, target: req.params.user, page: req.params.page}, {
+                        success: function(posts){
+                            return res.json(posts);
+                        }, error: function(error){
+                            return res.json({err: error});
+                        }
+                    });
+                }
+            })
+        });
+    });
 }

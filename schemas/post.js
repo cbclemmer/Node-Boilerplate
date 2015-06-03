@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 
 module.exports = new Schema({
     //owner's ID
-    owner: String,
+    owner: Object,
     title: String,
     //slug for url
     slug: String,
@@ -12,6 +12,7 @@ module.exports = new Schema({
     //like 'likes'
     hearts: String,
     content: String,
+    preview: String,
     public: Boolean,
     createdOn: Date,
     lastUpdated: Date

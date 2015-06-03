@@ -3,9 +3,11 @@ var schemas = require("../schemas/index.js");
 
 var User = mongoose.model('user', schemas.user);
 var Post = mongoose.model('post', schemas.post);
+var Friend = mongoose.model('friend', schemas.friend);
 
 var marked = require("marked");
 var slug  = require("slug");
+var fs = require('fs');
 
 module.exports = {
     /*
@@ -24,6 +26,9 @@ module.exports = {
             return exits.error("Title empty");
         else{
             inputs.content = marked(inputs.content);
+            var content = inputs.content;
+            inputs.preview = inputs.content.slice(inputs.content.search("<p>"),(inputs.content.search("</p>"))).slice(0,400)+"...</p>";
+            inputs.content = "";
             inputs.slug = slug(inputs.title);
             var time = new Date();
             inputs.createdOn = time;
@@ -34,9 +39,23 @@ module.exports = {
                 inputs.public = false;
             }
             inputs.hearts = 0;
-            (new Post(inputs)).save(function(err, post){
-                if(err) throw err;
-                return exits.success(post);
+            User.findOne({_id: inputs.owner}, function(err, user){
+                if (err) throw err;
+                user.password = null;
+                delete inputs.owner;
+                var obj = inputs;
+                obj.owner = user;
+                (new Post(obj)).save(function(err, post){
+                    if(err) throw err;
+                    obj.slug += ("-"+post._id);
+                    fs.writeFile("assets/views/posts/"+post._id+".html", content, function(err) {
+                        if(err) throw err;
+                        Post.update({_id: post._id}, obj, function(err, pos){
+                            if(err) throw err;
+                            return exits.success(post);
+                        })
+                    }); 
+                });
             });
         }
     },
@@ -79,6 +98,33 @@ module.exports = {
                 if(err) throw err;
                 return exits.success();
             })
+        });
+    },
+    /*
+        description: gets a post if the requirements are met
+        inputs: 
+            friends: boolean whether the user is friends with the owner
+            user: the user that is requesting the post
+            post: the id of the requested post
+    */
+    getOne: function(inputs, exits){
+        Post.findOne({_id: inputs.post}, function(err, post){
+            if(err) throw err;
+            if(!post)
+                return exits.error("Could not find post");
+            // If the user is the one that wrote the post
+            if(post.owner._id == inputs.user)
+                return exits.success(post);
+            // if the post is public
+            else if (post.public)
+                return exits.success(post);
+            // if the user is friends with the user
+            Friend.findOne({users: inputs.user, users: post.owner._id}, function(err, friend){
+                if(err) throw err;
+                if(friend)
+                    return exits.success(post._id);
+                return exits.error("You do not have permission");
+            });
         });
     }
 }

@@ -9,10 +9,8 @@ module.exports = function(app, controllers){
         redis.get(req.get("auth"), function(err, user) {
             if(err) throw err;
             if(user){
-                var obj = req.query;
-                obj.target = req.params.target;
+                var obj = req.body;
                 obj.owner = user;
-                obj.content = req.body.post;
                 controllers.post.create(obj, {
                     success: function(post){
                         res.json(post);
@@ -62,4 +60,16 @@ module.exports = function(app, controllers){
             })
         });
     });
+    app.get('/post/get/:post', function(req, res){
+        redis.get(req.get("auth"), function(err, user){
+            if(err) throw err;
+            controllers.post.getOne({user: user, post: req.params.post}, {
+                success: function(post){
+                    return res.render("posts/"+post);
+                }, error: function(error){
+                    return res.json({err: error});
+                }
+            })
+        });
+    })
 };

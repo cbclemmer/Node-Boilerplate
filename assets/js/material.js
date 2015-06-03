@@ -11,7 +11,7 @@ function showErr(error){
 		}, 5000);
 	});
 }
-function showinfo(info){
+function showInfo(info){
 	$('#info').css({top: '-200px'});
 	$('#info').empty();
 	$('#info').append(info);

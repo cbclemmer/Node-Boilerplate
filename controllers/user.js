@@ -42,11 +42,11 @@ module.exports = {
     getPosts: function(inputs, exits){
         var q;
         if(inputs.friends)
-            q = Post.find({owner: inputs.target});
+            q = Post.find({target: inputs.target});
         else
-            q = Post.find({owner: inputs.target, public: true});
+            q = Post.find({target: inputs.target, public: true});
         q.limit(15);
-        q.skip(inputs.page*15);
+        q.skip((parseInt(inputs.page)-1)*15);
         q.sort('-createdOn');
         q.exec(function(err, posts){
             if(err) throw err;
