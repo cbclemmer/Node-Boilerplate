@@ -114,10 +114,10 @@ module.exports = {
                 return exits.error("Could not find post");
             // If the user is the one that wrote the post
             if(post.owner._id == inputs.user)
-                return exits.success(post);
+                return exits.success(post._id);
             // if the post is public
-            else if (post.public)
-                return exits.success(post);
+            if (post.public)
+                return exits.success(post._id);
             // if the user is friends with the user
             Friend.findOne({users: inputs.user, users: post.owner._id}, function(err, friend){
                 if(err) throw err;

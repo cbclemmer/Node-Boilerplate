@@ -18,6 +18,7 @@
     "mongodb": "^2.0.31",
     "mongoose": "^4.0.3",
     "slug": "^0.9.1",
-    "validator": "^3.39.0"
+    "validator": "^3.39.0",
+    "com": "0.0.5"
   }
 }

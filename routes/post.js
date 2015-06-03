@@ -65,7 +65,7 @@ module.exports = function(app, controllers){
             if(err) throw err;
             controllers.post.getOne({user: user, post: req.params.post}, {
                 success: function(post){
-                    return res.render("posts/"+post);
+                    return res.render("posts/"+post+".html");
                 }, error: function(error){
                     return res.json({err: error});
                 }

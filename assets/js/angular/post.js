@@ -4,6 +4,10 @@
         this.create = function(obj){
             obj.public = "yes";
             if(!obj.target) obj.target = rs.user._id;
+            this.post = {};
+            $("#preview").empty();
+            $("#newPostButton").rotate(0);
+			$("#newPost").slideUp();
             h.post("/post/create/"+obj.target, obj).success(function(data){
                 if(data.err)
                     return showErr(data.err);
@@ -15,7 +19,7 @@
                 if(data.err) return showErr(data.err);
                 window.location.hash = "/@"+post.owner.username+"/"+post.slug;
                 rs.state = "post";
-                rs.pag.content = data
+                rs.pag.content = data;
             });
         }
     }]);
