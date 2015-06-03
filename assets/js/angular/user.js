@@ -4,12 +4,18 @@
         s.register = {};
         s.login = {};
         this.login = function(username, password){
-            h.post("/user/login?un="+username+"&password="+password).success(function(data){
+            var obj = {
+                un: username,
+                password: password
+            }
+            h.post("/user/login", obj).success(function(data){
                 if(data.err)
                     return showErr(data.err);
                 showinfo("Logged in");
-                rs.user = data;
+                rs.user = data.user;
+                config.headers.auth = data.auth;
                 rs.state = "home";
+                document.cookie = "auth="+data.auth;
                 window.location.hash = "home"
             });
         }
@@ -18,7 +24,7 @@
             for(var keys in obj){
                 s += keys + "=" + obj[keys] + "&";
             }
-            h.post(s).success(function(data){
+            h.post(s, {}, config).success(function(data){
                 if(data.err)
                     return showErr(data.err);
                 showinfo("Registration successful");
@@ -28,9 +34,11 @@
             });
         }
         this.logout = function(){
-            h.post('/user/logout').success(function(data){
+            h.post('/user/logout', {}, config).success(function(data){
                 window.location.hash = "login";
                 rs.state = "login";
+                h.defaults.headers.common.auth = "login";
+                document.cookie = "auth=login"
                 showinfo("Logged out");
             });
         }

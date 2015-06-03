@@ -9,7 +9,7 @@ function getunique(arr){
     var s = require("random-string")({length: 20});
     for(var i=0;i<arr.length;i++){
         if(arr[i]==s)
-            getunique(arr);
+            return getunique(arr);
     }
     return s;
 }
@@ -46,12 +46,12 @@ module.exports = function(app, controllers){
             return res.json({err: "You are logged in"});
         }
     });
-    app.post('/user/login', function(req, res){
+    app.post('/user/login',  function(req, res){
         var auth = req.get("auth");
         if(!auth)
             return res.json({err: "Invalid format"});
         else if(auth=="login"){
-            controllers.user.login(req.query, {
+            controllers.user.login(req.body, {
                 success: function(user){
                     redis.get("auths", function(err, auths){
                         if(!auths) auths = [];

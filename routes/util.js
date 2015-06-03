@@ -32,7 +32,6 @@ module.exports = function(app, controllers){
             }else{
                 res.json({info: "not logged in"});
             }
-            
         });
     });
     app.get('/', function(req, res) {
