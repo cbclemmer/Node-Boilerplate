@@ -23,5 +23,22 @@ module.exports = {
             });
             
         })
+    },
+    /*
+        description: returns a list of read notifications
+        inputs:
+            user
+    */
+    getOld: function(inputs, exits){
+        User.findOne({_id: inputs.user}, function(err, user){
+            if(err) throw err;
+            var q = Not.find({state: 1, 'owner.username': user.username});
+            q.sort("-createdOn");
+            q.limit(50);
+            q.exec(function(err, nots){
+                if(err) throw err;
+                return exits.success(nots);
+            });
+        });
     }
 }

@@ -20,7 +20,7 @@ module.exports = function(app, controllers){
                 }
             })
         })
-    });
+    }); 
     app.get('/friend/get/:user/:page', function(req, res){
         controllers.friend.get(req.params, {
             success: function(friends){

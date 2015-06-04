@@ -99,7 +99,7 @@ module.exports = {
             error: returns false
     */
     getState: function(inputs, exits){
-        Friend.findOne({users: inputs.u1, users: inputs.u2}, function(err, friend){
+        Friend.findOne({$and: [{users: inputs.u1}, {users: inputs.u2}]}, function(err, friend){
             if(err) throw err;
             if(friend)
                 return exits.success(friend.state);
@@ -114,7 +114,7 @@ module.exports = {
             request: the ID that you are making a request to.
     */
     addRequest: function(inputs, exits){
-        Friend.findOne({users: inputs.user, users: inputs.request}, function(err, friend){
+        Friend.findOne({$and: [{users: inputs.user}, {users: inputs.request}]}, function(err, friend){
             if(err) throw err;
             if(friend){
                 return exits.error("Request already sent");
@@ -132,9 +132,11 @@ module.exports = {
                             owner: u2,
                             type: "fr",
                             state: 0,
+                            reference: friend._id,
                             other: u1,
                             createdOn: (new Date())
                         }
+                        console.log(obj);
                         var notification = new Not(obj);
                         notification.save(function(err, notification){
                             if(err) throw err;
@@ -153,7 +155,7 @@ module.exports = {
             request: the ID that you are making a request to.
     */
     deleteRequest: function(inputs, exits){
-        Friend.findOne({users: inputs.user, users: inputs.request}, function(err, friend){
+        Friend.findOne({$and: [{users: inputs.user}, {users: inputs.request}]}, function(err, friend){
             if(err) throw err;
             if(!friend)
                 return exits.error("Request not found");
@@ -161,7 +163,10 @@ module.exports = {
                 return exits.error("Already friends");
             Friend.remove({users: inputs.user, users: inputs.request}, function(err){
                 if(err) throw err;
-                return exits.success();
+                Not.remove({reference: friend._id}, function(err){
+                    if(err) throw err;
+                    return exits.success();
+                });
             })
         });
     },
@@ -183,7 +188,11 @@ module.exports = {
                 friend.state = 2;
                 friend.createdOn = new Date();
                 friend.save(function(err, friend){
-                    return exits.success(friend);
+                    if(err) throw err;
+                    Not.remove({reference: friend._id}, function(err) {
+                        if(err) throw err;
+                        return exits.success(friend);
+                    });
                 });
             }else{
                 return exits.error("User cannot validate");

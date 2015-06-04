@@ -45,6 +45,17 @@ module.exports = function(app, controllers){
             })
        })
     });
+    app.get("/not/getold", function(req, res) {
+        redis.get(req.get("auth"), function(err, user) {
+            if(!user)
+                return res.json({err: "Not logged in"});
+            controllers.notification.getOld({user: user}, {
+                success: function(nots){
+                    return res.json(nots);
+                }
+            });
+        })
+    })
     app.get('/', function(req, res) {
         res.render('index.html');
     });

@@ -17,7 +17,7 @@
                         rs.pag = {};
                         rs.pag.nots = {
                             unRead: data,
-                            read: []
+                            
                         };
                     });
                 }else if (window.location.hash == "#home"){
@@ -73,13 +73,14 @@
             });
         }
         this.toFeed = function(){
+            if(!rs.pag) rs.pag = {}
+            rs.pag.nots = {}
             rs.state = "feed";
             window.location.hash = "feed";
             h.get("/user/getnots").success(function(data){
                 if(data.err) return showErr(data.err);
                 rs.pag.nots = {
-                    unRead: data,
-                    read: []
+                    unRead: data
                 };
             });
         }
@@ -106,11 +107,18 @@
                     if(rs.pag.nots.unRead[i]._id == not){
                         rs.pag.nots.unRead[i].state = 1;
                         var obj = rs.pag.nots.unRead[i];
-                        rs.pag.nots.read.push(obj);
-                        rs.pag.nots.unRead[i].pop();
+                        if(!rs.pag.nots.read)
+                            rs.pag.nots.read = [obj];
+                        rs.pag.nots.unRead.splice(i, 1);
                         break;
                     }
                 }
+            });
+        }
+        this.getOldNots = function(){
+            h.get("/not/getold").success(function(data){
+                if(data.err) return showErr(data.err);
+                rs.pag.nots.read = data;
             });
         }
     }]);

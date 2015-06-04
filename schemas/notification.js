@@ -15,6 +15,8 @@ module.exports = new Schema({
         2: ignore 
     */
     state: Number,
+    // the id of the other object
+    reference: String,
     // The other user associated with the notification
     other: Object,
     createdOn: Date,

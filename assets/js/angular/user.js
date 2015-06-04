@@ -14,6 +14,7 @@
                 showInfo("Logged in");
                 rs.user = data.user;
                 config.headers.auth = data.auth;
+                h.defaults.headers.common.auth = data.auth;
                 rs.state = "home";
                 document.cookie = "auth="+data.auth;
                 window.location.hash = "home"
