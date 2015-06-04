@@ -324,6 +324,7 @@ input[type="text"]:focus {
 	padding: 20px;
 	box-shadow: 3px 3px 3px grey;
 	z-index: 1;
+	cursor: pointer;
 }
 .postTop {
 	font-size: 20px;
@@ -439,6 +440,10 @@ box-shadow: none;
     display: none;
 }
 
+.hyp {
+	color: #2C56D4;
+	cursor: pointer;
+}
 #info, #err {
 	width: 50%;
 	height: 60px;

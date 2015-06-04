@@ -34,6 +34,7 @@
             <div class="topRight">
                 <input type="text" placeholder="Search..." id="searchBar"/>
                 <img src="icons/search.png" class="notInline search" id="search"></img>
+                <img src="icons/not.png" class="notInline search" id="search"></img>
             </div>
         </div>
         <div id="searchResults"></div>
@@ -115,10 +116,10 @@
                 <div class="aboutDivOption" id="aboutFriends" ng-controller="friendController as friendCtl" ng-click="friendCtl.get(0)">Friends</div>
             </div>
             <div id="shadow"></div>
-            <div id="sideNav" ng-controller="initController as initCtl">
+            <div id="sideNav">
                 <ul>
-                    <li ng-click="initCtl.toHome()"><img src="icons/home.png" class="notInline">&emsp;Home</li>
-                    <li ng-click="initCtl.toFeed()"><img src="icons/feed.png" class="notInline">&emsp;Feed</li>
+                    <li ng-click="init.toHome()"><img src="icons/home.png" class="notInline">&emsp;Home</li>
+                    <li ng-click="init.toFeed()"><img src="icons/feed.png" class="notInline">&emsp;Feed</li>
                     <li ng-controller="userController as userCtl" ng-click="userCtl.logout()"><img src="icons/logout.png" class="notInline">&emsp;Logout</li>
                 </ul>
             </div>
@@ -143,8 +144,9 @@
             <div class="posts">
                 <div class="post">
                     <h2>{{pag.name}} @{{pag.username}}</h2>
-                    <div ng-show="pag.friends == 0">
-                        <button>Add Friend</button>
+                    <br>
+                    <div ng-show="pag.friends == 0" ng-controller="friendController as friendCtl">
+                        <button ng-click="friendCtl.sendRequest(pag._id)">Add Friend</button>
                     </div>
                     <div ng-show="pag.friends == 1">
                         <span>Request Sent</span>
@@ -154,11 +156,14 @@
                     </div>
                 </div>
                 <div class="post" ng-repeat="post in pag.posts">
-                    <span ng-click="postCtl.show(post)">
-                        <h2>{{post.title}}</h2>
-                        <div class="postTop"><b>{{post.owner.name}}</b> <span>@{{post.owner.username}}</span><img src="icons/visable-black.png" class="notInline postVis" /></div><br>
-                        <div class="postContent" ng-bind-html="post.preview"></div>
-                    </span>
+                    <h2 ng-click="postCtl.show(post)">{{post.title}}</h2>
+                    <div class="postTop">
+                        <b>{{post.owner.name}}</b> 
+                        <span ng-click="init.toUser(post.owner.username)">@{{post.owner.username}}</span>
+                        <img src="icons/visable-black.png" class="notInline postVis" ng-show="post.public"/>
+                        <img src="icons/notVisable-black.png" class="notInline postVis" ng-hide="post.public"/>
+                    </div><br>
+                    <div class="postContent" ng-bind-html="post.preview"></div>
                 </div>
             </div>
         </div>
@@ -171,5 +176,45 @@
 		    <div class="article" ng-bind-html="pag.content">
 		    </div>
 		</div>
+		<!-- 
+        ##########################################################
+                                    Feed
+        ##########################################################
+        -->
+        <div ng-show="state=='feed'">
+            <div class="posts" ng-controller="friendController as friendCtl">
+                <div class="post">
+                    <h3>Notifications</h3>
+                    <br>
+                    <h4>New</h4>
+                    <div ng-repeat="not in pag.nots.unRead">
+                        <div ng-show="not.type=='fr'">
+                            New friend request from 
+                            <span ng-click="init.toUser(not.other.username)" class="hyp">@{{not.other.username}}</span>&emsp;&emsp;
+                            <span ng-click="friendCtl.acceptRequest(not.other._id)" class="hyp">Accept</span>&emsp;
+                            <span ng-click="friendCtl.deleteRequest(not.other._id)" class="hyp">Ignore</span>&emsp;
+                            <span ng-click="init.readNot(not._id)" class="hyp">Read</span>&emsp;
+                        </div>
+                    </div>
+                    <div ng-show="pag.nots.unRead.length == 0">
+                        <i>No new notifications</i>
+                    </div>
+                    <br>
+                    <h4>Read</h4>
+                    <div ng-repeat="not in pag.nots.read">
+                        <div ng-show="not.type=='fr'">
+                            New friend request from 
+                            <span ng-click="init.toUser(not.other.username)" class="hyp">@{{not.other.username}}</span>&emsp;&emsp;
+                            <span ng-click="friendCtl.acceptRequest(not.other._id)" class="hyp">Accept</span>&emsp;
+                            <span ng-click="friendCtl.deleteRequest(not.other._id)" class="hyp">Ignore</span>&emsp;
+                            <span ng-click="init.readNot(not._id)" class="hyp">Read</span>&emsp;
+                        </div>
+                    </div>
+                    <div ng-show="pag.nots.read.length == 0">
+                        <i>Notifications empty</i>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

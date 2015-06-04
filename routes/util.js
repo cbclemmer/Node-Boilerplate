@@ -34,6 +34,17 @@ module.exports = function(app, controllers){
             }
         });
     });
+    app.post("/not/read/:not", function(req, res){
+       redis.get(req.get("auth"), function(err, user) {
+           if(!user)
+                return res.json({err: "Not logged in"});
+            controllers.notification.read({not: req.params.not, user: user}, {
+                success: function(){
+                    return res.json({status: true});
+                }
+            })
+       })
+    });
     app.get('/', function(req, res) {
         res.render('index.html');
     });

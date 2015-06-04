@@ -79,6 +79,8 @@ module.exports = function(app, controllers){
     });
     app.get("/user/getposts/:page/:user", function(req, res){
         redis.get(req.get('auth'), function(err, user){
+            if(!user)
+                user = "";
             controllers.friend.getState({u1: user, u2: req.params.user}, {
                 success: function(state){
                     if (user==req.params.user || state == 2)
@@ -92,6 +94,18 @@ module.exports = function(app, controllers){
                             return res.json({err: error});
                         }
                     });
+                }
+            })
+        });
+    });
+    //Get notifications
+    app.get("/user/getNots", function(req, res){
+        redis.get(req.get("auth"), function(err, user){
+            if(!user)
+                return res.json({err: "Not logged in"});
+            controllers.user.getNots({user: user}, {
+                success: function(nots){
+                    return res.json(nots);
                 }
             })
         });

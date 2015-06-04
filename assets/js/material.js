@@ -63,7 +63,10 @@ $(document).on('click', "#login-button", function(){
     $(".sSign-up").hide();
     $(".sLogin").show();
 });
-
+$(document).on("click", "#searchResults div", function(){
+	var username = this.getElementsByTagName("span")[0].innerHTML.slice(1);
+	console.log(angular.element($("body")).scope().init.toUser(username));
+});
 $(document).ready(function(){
 	var i = screen.height;
     

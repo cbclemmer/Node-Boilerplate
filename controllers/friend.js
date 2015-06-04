@@ -3,6 +3,7 @@ var schemas = require("../schemas/index.js");
 
 var Friend = mongoose.model('friend', schemas.friend);
 var User = mongoose.model('user', schemas.user);
+var Not = mongoose.model('notification', schemas.notification);
 
 module.exports = {
     /*
@@ -121,7 +122,26 @@ module.exports = {
             var obj = {users: [inputs.user, inputs.request], requestTo: inputs.request, state: 1, createdOn: (new Date())};
             (new Friend(obj)).save(function(err, friend){
                 if(err) throw err;
-                return exits.success(friend);
+                User.findOne({_id: inputs.user}, function(err, u1){
+                    if(err) throw err;
+                    User.findOne({_id: inputs.request}, function(err, u2){
+                        if(err) throw err;
+                        u1.password = null;
+                        u2.password = null;
+                        obj = {
+                            owner: u2,
+                            type: "fr",
+                            state: 0,
+                            other: u1,
+                            createdOn: (new Date())
+                        }
+                        var notification = new Not(obj);
+                        notification.save(function(err, notification){
+                            if(err) throw err;
+                            return exits.success(friend);
+                        });
+                    });
+                });
             });
         });
     },

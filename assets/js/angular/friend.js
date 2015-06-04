@@ -6,5 +6,11 @@
                 rs.user.friends = data;
             });
         }
+        this.sendRequest = function(user){
+            h.post("/friend/addrequest/"+user).success(function(data){
+                if(data.err) showErr(data.err);
+                rs.pag.friends = 1;
+            });
+        }
     }]);
 })();

@@ -3,6 +3,7 @@ var schemas = require("../schemas/index.js");
 
 var User = mongoose.model('user', schemas.user);
 var Post = mongoose.model('post', schemas.post);
+var Not = mongoose.model('notification', schemas.notification);
 
 var objectID = require("mongodb").ObjectID;
 var bCrypt = require("bcrypt")
@@ -56,6 +57,23 @@ module.exports = {
         });
     },
 
+    /*
+        description: gets notifications for a specific user
+            sends back two lists: read and unread
+        inputs:
+            user: the user to get the notifications for
+    */
+    getNots: function(inputs, exits){
+        User.findOne({_id: inputs.user}, function(err, user){
+            if(err) throw err;
+            var q = Not.find({state: 0, 'owner.username': user.username});
+            q.sort("-createdOn");
+            q.exec(function(err, nots){ 
+                if(err) throw err;
+                return exits.success(nots);
+            });
+        });
+    },
     /*
         inputs: 
             name, username, email, password, cpass
