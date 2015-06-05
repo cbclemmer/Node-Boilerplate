@@ -12,6 +12,7 @@
         <script src="js/dependencies/jquery.js"></script>
         <script src="js/dependencies/showdown.js"></script>
         <script src="js/dependencies/angular.js"></script>
+        <script src="js/dependencies/moment.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular-sanitize.min.js"></script>
         <script src="js/angular/post.js"></script>
         <script src="js/angular/friend.js"></script>
@@ -156,7 +157,7 @@
                     </div>
                 </div>
                 <div class="post" ng-repeat="post in pag.posts">
-                    <h2 ng-click="postCtl.show(post)">{{post.title}}</h2>
+                    <h2 class="hyp" ng-click="postCtl.show(post)">{{post.title}}</h2>
                     <div class="postTop">
                         <b>{{post.owner.name}}</b> 
                         <span ng-click="init.toUser(post.owner.username)">@{{post.owner.username}}</span>
@@ -174,6 +175,10 @@
         -->
         <div class="main" ng-show="state=='post'">
 		    <div class="article" ng-bind-html="pag.content">
+		    </div>
+		    <div class="bottom">
+		        <span ng-click="init.toUser(pag._id)">{{pag.name}} <span class="hyp">@{{pag.username}}</span></span>&emsp;
+		        <i>{{pag.post.createdOn}}</i>
 		    </div>
 		</div>
 		<!-- 

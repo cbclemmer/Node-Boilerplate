@@ -15,9 +15,14 @@
                 rs.user = data.user;
                 config.headers.auth = data.auth;
                 h.defaults.headers.common.auth = data.auth;
-                rs.state = "home";
+                rs.state = "feed";
                 document.cookie = "auth="+data.auth;
-                window.location.hash = "home"
+                window.location.hash = "feed";
+                h.get("/user/getnots").success(function(data){
+                    if(data.err) return showErr(data.err);
+                    rs.pag = {};
+                    rs.pag.nots = {unRead: data};
+                });
             });
         }
         this.register = function(obj){

@@ -31,17 +31,22 @@
                     });
                 }else if(window.location.hash.search("@") != -1){
                     var slug = window.location.hash.split("/")[2];
-                    if(slug){
-                        rs.state = "post";
-                        h.get("/post/get/"+slug.split("-")[window.location.hash.split("/")[2].split("-").length-1]).success(function(data){
-                            if(data.err) return showErr(data.err);
-                            rs.pag = {}
-                            rs.pag.content = data;
-                        });
-                    }else{
-                        var username = window.location.hash.slice((window.location.hash.search("@") + 1), window.location.hash.length)
-                        h.get("/user/getone/"+username).success(function(user){
-                            if(user.err) return showErr(user.err);
+                    var username = window.location.hash.slice((window.location.hash.search("@") + 1))
+                    username = username.slice(0,username.search("/"));
+                    h.get("/user/getone/"+username).success(function(user){
+                        if(user.err) return showErr(user.err);
+                        if(slug){
+                            rs.state = "post";
+                            h.get("/post/gettext/"+slug.split("-")[window.location.hash.split("/")[2].split("-").length-1]).success(function(data){
+                                if(data.err) return showErr(data.err);
+                                rs.pag = user;
+                                rs.pag.content = data;
+                                h.get("/post/get/"+slug.split("-")[window.location.hash.split("/")[2].split("-").length-1]).success(function(data){
+                                    rs.pag.post = data;
+                                    rs.pag.post.createdOn = moment(rs.pag.post.createdOn).format('LLL');
+                                });
+                            });
+                        }else{
                             h.get("/user/getposts/1/"+user._id).success(function(posts){
                                 if(posts.err)
                                     return showErr(posts.err);
@@ -53,8 +58,8 @@
                                     rs.pag.friends = state.state;
                                 });
                             });
-                        });
-                    }
+                        }
+                    });
                 }
             }else{
                 rs.state = "login";
@@ -62,6 +67,7 @@
             }
         });
         this.toHome = function(){
+            $(window).scrollTop(0);
             h.get("/user/getposts/1/"+rs.user._id).success(function(data){
                 if(data.err)
                     return showErr(data.err);
@@ -73,6 +79,7 @@
             });
         }
         this.toFeed = function(){
+            $(window).scrollTop(0);
             if(!rs.pag) rs.pag = {}
             rs.pag.nots = {}
             rs.state = "feed";
@@ -85,6 +92,7 @@
             });
         }
         this.toUser = function(username){
+            $(window).scrollTop(0);
             h.get("/user/getone/"+username).success(function(user){
                 if(user.err) return showErr(user.err);
                 h.get("/user/getposts/1/"+user._id).success(function(posts){

@@ -101,13 +101,13 @@ module.exports = {
         });
     },
     /*
-        description: gets a post if the requirements are met
+        description: gets post html if the requirements are met
         inputs: 
             friends: boolean whether the user is friends with the owner
             user: the user that is requesting the post
             post: the id of the requested post
     */
-    getOne: function(inputs, exits){
+    getText: function(inputs, exits){
         Post.findOne({_id: inputs.post}, function(err, post){
             if(err) throw err;
             if(!post)
@@ -123,6 +123,26 @@ module.exports = {
                 if(err) throw err;
                 if(friend)
                     return exits.success(post._id);
+                return exits.error("You do not have permission");
+            });
+        });
+    },
+    get: function(inputs, exits){
+        Post.findOne({_id: inputs.post}, function(err, post){
+            if(err) throw err;
+            if(!post)
+                return exits.error("Could not find post");
+            // If the user is the one that wrote the post
+            if(post.owner._id == inputs.user)
+                return exits.success(post);
+            // if the post is public
+            if (post.public)
+                return exits.success(post);
+            // if the user is friends with the user
+            Friend.findOne({users: inputs.user, users: post.owner._id}, function(err, friend){
+                if(err) throw err;
+                if(friend)
+                    return exits.success(post);
                 return exits.error("You do not have permission");
             });
         });

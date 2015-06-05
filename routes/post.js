@@ -60,10 +60,10 @@ module.exports = function(app, controllers){
             })
         });
     });
-    app.get('/post/get/:post', function(req, res){
+    app.get('/post/gettext/:post', function(req, res){
         redis.get(req.get("auth"), function(err, user){
             if(err) throw err;
-            controllers.post.getOne({user: user, post: req.params.post}, {
+            controllers.post.getText({user: user, post: req.params.post}, {
                 success: function(post){
                     return res.render("posts/"+post+".html");
                 }, error: function(error){
@@ -71,5 +71,15 @@ module.exports = function(app, controllers){
                 }
             })
         });
-    })
+    });
+    app.get('/post/get/:post', function(req, res){
+        redis.get(req.get("auth"), function(err, user){
+            if(err) throw err;
+            controllers.post.get({user: user, post: req.params.post}, {
+                success: function(post){
+                    return res.json(post);
+                }
+            })
+        });
+    });
 };

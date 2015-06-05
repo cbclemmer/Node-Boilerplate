@@ -15,11 +15,17 @@
             });
         }
         this.show = function(post){
-            h.get("/post/get/"+post._id).success(function(data){
+            $(window).scrollTop(0);
+            h.get("/post/gettext/"+post._id).success(function(data){
                 if(data.err) return showErr(data.err);
                 window.location.hash = "/@"+post.owner.username+"/"+post.slug;
                 rs.state = "post";
                 rs.pag.content = data;
+                h.get("/post/get/"+post._id).success(function(data) {
+                    if(data.err) return showErr(data.err);
+                    rs.pag.post = data;
+                    rs.pag.post.createdOn = moment(rs.pag.post.createdOn).format('LLL');
+                });
             });
         }
     }]);
