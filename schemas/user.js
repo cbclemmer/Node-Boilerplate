@@ -7,5 +7,6 @@ module.exports = new Schema({
     email: String,
     password: String,
     online: Boolean,
-    admin: Boolean
+    admin: Boolean,
+    socket: String
 });

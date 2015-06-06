@@ -1,4 +1,6 @@
-var app = require("./express.js").app;
+var obj = require("./express.js");
+var app = obj.app;
+var io  = obj.io;
 
 var mongoose = require("mongoose");
 
@@ -10,3 +12,4 @@ var controllers = require("./controllers/index.js");
 
 //set the routes
 require("./routes/index.js")(app, controllers);
+require("./socket.js")(io, controllers);

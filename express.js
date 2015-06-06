@@ -7,7 +7,8 @@ var inputs = {
 //Express Init
 var express = require("express"),
     app = express(),
-    server = require("http").Server(app);
+    server = require("http").Server(app),
+    io = require("socket.io")(server);
 
 var bodyParser = require('body-parser')
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
@@ -27,5 +28,6 @@ console.log("Express server listening on port "+inputs.port);
 module.exports = {
     express: express,
     app: app,
-    server: server
+    server: server,
+    io: io
 }

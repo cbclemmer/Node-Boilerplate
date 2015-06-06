@@ -1,7 +1,12 @@
 (function(){
-    var app = angular.module("app", ['user', 'friend', 'post', 'ngSanitize']);
-    app.controller('initController', ['$http', '$scope', '$rootScope', '$sce', function(h, s, rs, $sce){
-        var auth = getCookie("auth");
+    var app = angular.module("app", ['user', 'friend', 'post', 'ngSanitize', 'btford.socket-io', 'socke']).
+    factory('socket', function (socketFactory) {
+        console.log("this");
+        return socketFactory();
+    });
+    app.controller('initController', ['$http', '$scope', '$rootScope', '$sce', 'socket', function(h, s, rs, $sce, socket){
+        var auth = getCookie("auth"); 
+        socket.emit("auth", auth);
         if (auth == null||auth == "login"){
             h.defaults.headers.common.auth = "login";
         }else{
