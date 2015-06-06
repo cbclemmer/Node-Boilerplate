@@ -38,19 +38,19 @@
                         }
                     });
                 }else if(window.location.hash.search("@") != -1){
-                    var slug = window.location.hash.split("/")[2];
-                    var username = window.location.hash.slice((window.location.hash.search("@") + 1))
+                    var slug = window.location.hash.split("/")[3];
+                    var username = window.location.hash.slice((window.location.hash.search("@") + 1), window.location.hash.search("/"));
                     if(slug)
                         username = username.slice(0,username.search("/"));
                     h.get("/user/getone/"+username).success(function(user){
                         if(user.err) return showErr(user.err);
                         if(slug){
                             rs.state = "post";
-                            h.get("/post/gettext/"+slug.split("-")[window.location.hash.split("/")[2].split("-").length-1]).success(function(data){
+                            h.get("/post/gettext/"+slug.split("-")[window.location.hash.split("/")[3].split("-").length-1]).success(function(data){
                                 if(data.err) return showErr(data.err);
                                 rs.pag = user;
                                 rs.pag.content = data;
-                                h.get("/post/get/"+slug.split("-")[window.location.hash.split("/")[2].split("-").length-1]).success(function(data){
+                                h.get("/post/get/"+slug.split("-")[window.location.hash.split("/")[3].split("-").length-1]).success(function(data){
                                     rs.pag.post = data;
                                     rs.pag.post.createdOn = moment(rs.pag.post.createdOn).format('LLL');
                                 });
@@ -112,7 +112,7 @@
                 h.get("/user/getposts/1/"+user._id).success(function(posts){
                     if(posts.err) return showErr(posts.err);
                     rs.state = "user";
-                    window.location.hash = "@"+username+"-posts";
+                    window.location.hash = "@"+username+"/posts";
                     rs.pag = user;
                     rs.pag.posts = posts;
                     rs.pag.newPosts = 0;
@@ -131,7 +131,7 @@
                 if(user.err) return showErr(user.err);
                 rs.state = "mess";
                 socket.emit("toMess", {auth: getCookie("auth"), user: username});
-                window.location.hash = "@"+username+"-messages";
+                window.location.hash = "@"+username+"/messages";
                 rs.pag = user;
                 h.get("/mess/get/"+username).success(function(mess) {
                     if(mess.err) showErr(mess.err);
