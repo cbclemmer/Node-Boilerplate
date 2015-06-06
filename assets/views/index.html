@@ -39,6 +39,7 @@
                 <img src="icons/not.png" class="notInline search" id="search"></img>
             </div>
         </div>
+        <div class="holder"></div>
         <div id="searchResults"></div>
         <div id="err"></div>
         <div id="info"></div>
@@ -123,6 +124,7 @@
                     <li ng-click="init.toHome()"><img src="icons/home.png" class="notInline">&emsp;Home</li>
                     <li ng-click="init.toFeed()"><img src="icons/feed.png" class="notInline">&emsp;Feed</li>
                     <li ng-controller="userController as userCtl" ng-click="userCtl.logout()"><img src="icons/logout.png" class="notInline">&emsp;Logout</li>
+                    <li ng-click="init.toMess()">Messages</li>
                 </ul>
             </div>
             <div id="friendsDiv" ng-controller="friendController as friendCtl">
@@ -142,7 +144,7 @@
                                     User
         ##########################################################
         -->
-        <div ng-show="state=='user'||state=='home'" ng-controller="postController as postCtl">
+        <div ng-show="state=='user'||state=='home'||state=='mess'" ng-controller="postController as postCtl">
             <div class="posts">
                 <div class="post">
                     <h2>{{pag.name}} @{{pag.username}}</h2>
@@ -157,10 +159,24 @@
                         <span>Friends</span>
                     </div>
                 </div>
+                <div class="pm">
+                    <div class="post halfLeft">
+                        <h3>Posts</h3>
+                    </div>
+                    <div class="post halfRight" ng-click="init.toMess(rs.pag.username)">
+                        <h3>Messages</h3>
+                    </div>
+                </div>
                 <div ng-show="pag.newPosts > 0" class="post" ng-controller="postController as postCtl">
                     {{pag.newPosts}} new posts. <span class="hyp" ng-click="postCtl.getNew()">Fetch Posts</span>
                 </div>
-                <div class="post" ng-repeat="post in pag.posts">
+                
+                <!--
+                ##########################################
+                                Posts
+                ##########################################
+                -->
+                <div class="post" ng-repeat="post in pag.posts" ng-show="state=='home'||state=='user'">
                     <div class="postTop">
                         <b>{{post.owner.name}}</b> 
                         <span ng-click="init.toUser(post.owner.username)" class="hyp">@{{post.owner.username}}</span>
@@ -169,6 +185,19 @@
                     </div><br>
                     <h2 class="hyp" ng-click="postCtl.show(post)">{{post.title}}</h2>
                     <div class="postContent" ng-bind-html="post.preview"></div>
+                </div>
+                <!--
+                ##########################################
+                                Messages
+                ##########################################
+                -->
+                <div class="messages" ng-show="state='mess'">
+                    <div class="post" ng-repeat="mess in pag.messages">
+                        
+                    </div>
+                </div>
+                <div class="messageInput">
+                    <input type="text" placeholder="message...">
                 </div>
             </div>
         </div>

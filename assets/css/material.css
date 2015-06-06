@@ -167,6 +167,7 @@ input[type="text"]:focus {
 	padding-left: 5%;
 	padding-top: 100px;
 	z-index: 10;
+	position: fixed;
 }
 .bottom {
 	position: fixed;
@@ -177,6 +178,10 @@ input[type="text"]:focus {
 	padding-top: 10px;
 	background-color: white;
 	border-top: 1px solid #DBDBDB;
+}
+.holder {
+	height: 175px;
+	top: 0px;
 }
 /*
 	Home specific
@@ -349,6 +354,24 @@ input[type="text"]:focus {
 .postContent {
 	font-family: Crimson;
 	font-size: 20px;
+}
+.halfLeft {
+	width: 40%;
+	display: inline-block;
+	margin-right: 8%;
+	text-align: center;
+	cursor: pointer;
+}
+.halfRight {
+	width: 40%;
+	display: inline-block;
+	text-align: center;
+	cursor: pointer;
+}
+.pm {
+	margin-left: auto;
+	margin-right: auto;
+	width: 740px;
 }
 /*
 	Article specific

@@ -39,14 +39,14 @@ jQuery.fn.rotate = function(degrees) {
 
 window.onscroll=function(){
     if(window.pageYOffset>0){
-    	$(".top").css({paddingTop: "20px", position: "fixed", top: "0px", fontSize: "20pt", height: "60px"});
+    	$(".top").css({paddingTop: "20px", top: "0px", fontSize: "20pt", height: "60px"});
     	$(".topRight").css({marginTop: "-10px"});
     	$("#searchResults").css({top: "80px"});
     	$("#aboutDiv").css({top: "80px"});
     	$("#newPost").css({top: "80px"});
     }
     if(window.pageYOffset==0){
-    	$(".top").css({paddingTop: "100px", position: "relative", fontSize: "34pt", height: "75px"});
+    	$(".top").css({paddingTop: "100px", fontSize: "34pt", height: "75px"});
     	$(".topRight").css({marginTop: "0px"});
     	$("#searchResults").css({top: "175px"});
     	$("#aboutDiv").css({top: "175px"});

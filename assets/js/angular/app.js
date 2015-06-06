@@ -110,10 +110,9 @@
             h.get("/user/getone/"+username).success(function(user){
                 if(user.err) return showErr(user.err);
                 h.get("/user/getposts/1/"+user._id).success(function(posts){
-                    if(posts.err)
-                        return showErr(posts.err);
+                    if(posts.err) return showErr(posts.err);
                     rs.state = "user";
-                    window.location.hash = "@"+username;
+                    window.location.hash = "@"+username+"-posts";
                     rs.pag = user;
                     rs.pag.posts = posts;
                     rs.pag.newPosts = 0;
@@ -123,6 +122,20 @@
                     h.get("/friend/getstate/"+rs.user._id+"/"+user._id).success(function(state){
                         rs.pag.friends = state.state;
                     });
+                });
+            });
+        }
+        this.toMess = function(username){
+            $(window).scrollTop(0);
+            h.get("/user/getone/"+username).success(function(user) {
+                if(user.err) return showErr(user.err);
+                rs.state = "mess";
+                socket.emit("toMess", {auth: getCookie("auth"), user: username});
+                window.location.hash = "@"+username+"-messages";
+                rs.pag = user;
+                h.get("/mess/get/"+username).success(function(mess) {
+                    if(mess.err) showErr(mess.err);
+                    rs.pag.messages = mess;
                 });
             });
         }
