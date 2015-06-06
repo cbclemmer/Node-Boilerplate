@@ -19,7 +19,6 @@
         <script src="js/angular/post.js"></script>
         <script src="js/angular/friend.js"></script>
         <script src="js/angular/user.js"></script>
-        <script src="js/angular/socket.js"></script>
         <script src="js/angular/app.js"></script>
         <script src="js/material.js"></script>
         
@@ -180,7 +179,7 @@
 		    <div class="article" ng-bind-html="pag.content">
 		    </div>
 		    <div class="bottom">
-		        <span ng-click="init.toUser(pag._id)">{{pag.name}} <span class="hyp">@{{pag.username}}</span></span>&emsp;
+		        <span ng-click="init.toUser(pag.username)">{{pag.name}} <span class="hyp">@{{pag.username}}</span></span>&emsp;
 		        <i>{{pag.post.createdOn}}</i>
 		    </div>
 		</div>
@@ -195,7 +194,7 @@
                     <h3>Notifications</h3>
                     <br>
                     <h4>New</h4>
-                    <div ng-repeat="not in pag.nots.unRead">
+                    <div ng-repeat="not in nots.unRead">
                         <div ng-show="not.type=='fr'">
                             New friend request from 
                             <span ng-click="init.toUser(not.other.username)" class="hyp">@{{not.other.username}}</span>&emsp;&emsp;
@@ -204,12 +203,12 @@
                             <span ng-click="init.readNot(not._id)" class="hyp">Read</span>&emsp;
                         </div>
                     </div>
-                    <div ng-show="pag.nots.unRead.length == 0||!pag.nots.unRead">
+                    <div ng-show="nots.unRead.length == 0||!nots.unRead">
                         <i>No new notifications</i>
                     </div>
                     <br>
                     <h4>Read</h4>
-                    <div ng-repeat="not in pag.nots.read">
+                    <div ng-repeat="not in nots.read">
                         <div ng-show="not.type=='fr'">
                             New friend request from 
                             <span ng-click="init.toUser(not.other.username)" class="hyp">@{{not.other.username}}</span>&emsp;&emsp;
@@ -217,7 +216,7 @@
                             <span ng-click="friendCtl.deleteRequest(not.reference)" class="hyp">Ignore</span>&emsp;
                         </div>
                     </div>
-                    <div ng-show="pag.nots.read.length == 0">
+                    <div ng-show="nots.read.length == 0">
                         <i>Notifications empty</i>
                     </div>
                     <div class="hyp" ng-click="init.getOldNots()">

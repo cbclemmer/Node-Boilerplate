@@ -42,7 +42,7 @@ module.exports = function(io, controllers){
                 Not.findOne({$and: [{'owner.username': user.username}, {'other.username': data.sender}]}, function(err, not){
                     if(err) throw err;
                     // send it to the requested socket
-                    io.sockets.connected[user.socket].send("not", not);
+                    return io.sockets.connected[user.socket].emit("not", not);
                 });
             });
         });

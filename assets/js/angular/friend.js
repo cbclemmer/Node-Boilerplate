@@ -17,17 +17,17 @@
             h.post("/friend/validaterequest/" + req).success(function(data) {
                 if(data.err) return showErr(data.err);
                 if(window.location.hash="#feed"){
-                    if(rs.pag.nots.read){
-                        for(var i=0;i<rs.pag.nots.read.length;i++){
-                            if(rs.pag.nots.read[i].reference==data._id){
-                                rs.pag.nots.read.splice(i, 1);
+                    if(rs.nots.read){
+                        for(var i=0;i<rs.nots.read.length;i++){
+                            if(rs.nots.read[i].reference==data._id){
+                                rs.nots.read.splice(i, 1);
                             }
                         }
                     }
-                    if(rs.pag.nots.unRead){
-                        for(var i=0;i<rs.pag.nots.unRead.length;i++){
-                            if(rs.pag.nots.unRead[i].reference==data._id){
-                                rs.pag.nots.unRead.splice(i, 1);
+                    if(rs.nots.unRead){
+                        for(var i=0;i<rs.nots.unRead.length;i++){
+                            if(rs.nots.unRead[i].reference==data._id){
+                                rs.nots.unRead.splice(i, 1);
                             }
                         }
                     }
@@ -38,17 +38,17 @@
             h.post("/friend/deleterequest/"+req).success(function(data) {
                 if(data.err) return showErr(data.err);
                 if(window.location.hash="#feed"){
-                    if(rs.pag.nots.read){
-                        for(var i=0;i<rs.pag.nots.read.length;i++){
-                            if(rs.pag.nots.read[i].other._id==req){
-                                rs.pag.nots.read.splice(i, 1);
+                    if(rs.nots.read){
+                        for(var i=0;i<rs.nots.read.length;i++){
+                            if(rs.nots.read[i].other._id==req){
+                                rs.nots.read.splice(i, 1);
                             }
                         }
                     }
-                    if(rs.pag.nots.unRead){
-                        for(var i=0;i<rs.pag.nots.unRead.length;i++){
-                            if(rs.pag.nots.unRead[i].other._id==req){
-                                rs.pag.nots.unRead.splice(i, 1);
+                    if(rs.nots.unRead){
+                        for(var i=0;i<rs.nots.unRead.length;i++){
+                            if(rs.nots.unRead[i].other._id==req){
+                                rs.nots.unRead.splice(i, 1);
                             }
                         }
                     }

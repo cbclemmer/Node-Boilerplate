@@ -136,7 +136,6 @@ module.exports = {
                             other: u1,
                             createdOn: (new Date())
                         }
-                        console.log(obj);
                         var notification = new Not(obj);
                         notification.save(function(err, notification){
                             if(err) throw err;

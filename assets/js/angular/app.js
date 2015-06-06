@@ -1,12 +1,15 @@
 (function(){
-    var app = angular.module("app", ['user', 'friend', 'post', 'ngSanitize', 'btford.socket-io', 'socke']).
+    var app = angular.module("app", ['user', 'friend', 'post', 'ngSanitize', 'btford.socket-io']).
     factory('socket', function (socketFactory) {
-        console.log("this");
         return socketFactory();
     });
     app.controller('initController', ['$http', '$scope', '$rootScope', '$sce', 'socket', function(h, s, rs, $sce, socket){
         var auth = getCookie("auth"); 
         socket.emit("auth", auth);
+        rs.nots = {
+            unRead: [],
+            read: []
+        };
         if (auth == null||auth == "login"){
             h.defaults.headers.common.auth = "login";
         }else{
@@ -20,10 +23,7 @@
                     h.get("/user/getnots").success(function(data){
                         if(data.err) return showErr(data.err);
                         rs.pag = {};
-                        rs.pag.nots = {
-                            unRead: data,
-                            
-                        };
+                        rs.nots.unRead = data;
                     });
                 }else if (window.location.hash == "#home"){
                     rs.state = "home";
@@ -37,7 +37,8 @@
                 }else if(window.location.hash.search("@") != -1){
                     var slug = window.location.hash.split("/")[2];
                     var username = window.location.hash.slice((window.location.hash.search("@") + 1))
-                    username = username.slice(0,username.search("/"));
+                    if(slug)
+                        username = username.slice(0,username.search("/"));
                     h.get("/user/getone/"+username).success(function(user){
                         if(user.err) return showErr(user.err);
                         if(slug){
@@ -56,7 +57,6 @@
                                 if(posts.err)
                                     return showErr(posts.err);
                                 rs.state = "user";
-                                window.location.hash = "@"+username;
                                 rs.pag = user;
                                 rs.pag.posts = posts;
                                 h.get("/friend/getstate/"+rs.user._id+"/"+user._id).success(function(state){
@@ -86,14 +86,11 @@
         this.toFeed = function(){
             $(window).scrollTop(0);
             if(!rs.pag) rs.pag = {}
-            rs.pag.nots = {}
             rs.state = "feed";
             window.location.hash = "feed";
             h.get("/user/getnots").success(function(data){
                 if(data.err) return showErr(data.err);
-                rs.pag.nots = {
-                    unRead: data
-                };
+                rs.nots.unRead = data;
             });
         }
         this.toUser = function(username){
@@ -116,13 +113,13 @@
         this.readNot = function(not){
             h.post("/not/read/"+not).success(function(data){
                 if(data.err) return showErr(data.err);
-                for (var i=0;i<rs.pag.nots.unRead.length;i++){
-                    if(rs.pag.nots.unRead[i]._id == not){
+                for (var i=0;i<rs.nots.unRead.length;i++){
+                    if(rs.nots.unRead[i]._id == not){
                         rs.pag.nots.unRead[i].state = 1;
-                        var obj = rs.pag.nots.unRead[i];
-                        if(!rs.pag.nots.read)
-                            rs.pag.nots.read = [obj];
-                        rs.pag.nots.unRead.splice(i, 1);
+                        var obj = rs.nots.unRead[i];
+                        if(!rs.nots.read)
+                            rs.nots.read = [obj];
+                        rs.nots.unRead.splice(i, 1);
                         break;
                     }
                 }
@@ -140,7 +137,7 @@
         #######################
         */
         socket.on("not", function(data){
-            //rs.nots.unread.push(data);
+            rs.nots.unRead.push(data);
         });
     }]);
 })();
