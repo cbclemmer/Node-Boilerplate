@@ -83,5 +83,23 @@ module.exports = function(io, controllers){
                 });
             });
         });
+        /*
+            When a user visits their page, subscribe them to getting new posts by socket
+        */
+        socket.on("toUser", function(data) {
+            var rooms = socket.rooms;
+            var id = socket.id;
+            for(var i = 0;i<rooms.length;i++){
+                socket.leave(rooms[i]);
+            }
+            socket.join(id);
+            socket.join(data.user);
+        });
+        /*
+            when a user makes a post, let all the people in that room know
+        */
+        socket.on("post", function(data) {
+            io.to(data).emit("post", true);
+        })
     });
 } 

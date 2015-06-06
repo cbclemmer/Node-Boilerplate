@@ -146,5 +146,25 @@ module.exports = {
                 return exits.error("You do not have permission");
             });
         });
+    },
+    getNew: function(inputs, exits){
+        Post.findOne({_id: inputs.post}, function(err, post){
+            if(err) throw err;
+            if(!post)
+                return exits.error("Could not find post");
+            // If the user is the one that wrote the post
+            if(post.owner._id == inputs.user)
+                return exits.success(post);
+            // if the post is public
+            if (post.public)
+                return exits.success(post);
+            // if the user is friends with the user
+            Friend.findOne({users: inputs.user, users: post.owner._id}, function(err, friend){
+                if(err) throw err;
+                if(friend)
+                    return exits.success(post);
+                return exits.error("You do not have permission");
+            });
+        });
     }
 }

@@ -53,12 +53,14 @@
                                 });
                             });
                         }else{
+                            socket.emit("toUser", {auth: getCookie("auth"), user: username});
                             h.get("/user/getposts/1/"+user._id).success(function(posts){
                                 if(posts.err)
                                     return showErr(posts.err);
                                 rs.state = "user";
                                 rs.pag = user;
                                 rs.pag.posts = posts;
+                                rs.pag.newPosts = 0;
                                 h.get("/friend/getstate/"+rs.user._id+"/"+user._id).success(function(state){
                                     rs.pag.friends = state.state;
                                 });
@@ -95,6 +97,7 @@
         }
         this.toUser = function(username){
             $(window).scrollTop(0);
+            socket.emit("toUser", {auth: getCookie("auth"), user: username});
             h.get("/user/getone/"+username).success(function(user){
                 if(user.err) return showErr(user.err);
                 h.get("/user/getposts/1/"+user._id).success(function(posts){
@@ -104,6 +107,7 @@
                     window.location.hash = "@"+username;
                     rs.pag = user;
                     rs.pag.posts = posts;
+                    rs.pag.newPosts = 0;
                     h.get("/friend/getstate/"+rs.user._id+"/"+user._id).success(function(state){
                         rs.pag.friends = state.state;
                     });
@@ -153,6 +157,9 @@
         */
         socket.on("not", function(data){
             rs.nots.unRead.push(data);
+        });
+        socket.on("post", function(data){
+            rs.pag.newPosts += 1;
         });
     }]);
 })();

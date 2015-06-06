@@ -82,4 +82,15 @@ module.exports = function(app, controllers){
             })
         });
     });
+    app.post('/post/getnew', function(req, res){
+        console.log(req.body);
+        redis.get(req.get("auth"), function(err, user){
+            if(err) throw err;
+            controllers.post.getNew({user: user, post: req.params.post, time: req.body}, {
+                success: function(post){
+                    return res.json(post);
+                }
+            });
+        });
+    });
 };

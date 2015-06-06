@@ -27,7 +27,6 @@
             Boiler
         </div>
         
-        
         <div class="top" ng-hide="state=='login'">
             <button class="iconButton hamburger" id="menuButton"></button>
             {{user.name}} @{{user.username}}
@@ -157,6 +156,9 @@
                     <div ng-show="pag.friends == 2">
                         <span>Friends</span>
                     </div>
+                </div>
+                <div ng-show="pag.newPosts > 0" class="post" ng-controller="postController as postCtl">
+                    {{pag.newPosts}} new posts. <span class="hyp" ng-click="postCtl.getNew()">Fetch Posts</span>
                 </div>
                 <div class="post" ng-repeat="post in pag.posts">
                     <h2 class="hyp" ng-click="postCtl.show(post)">{{post.title}}</h2>
