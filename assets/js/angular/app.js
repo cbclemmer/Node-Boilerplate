@@ -134,5 +134,13 @@
                 rs.pag.nots.read = data;
             });
         }
+        /*
+        #######################
+                Sockets
+        #######################
+        */
+        socket.on("not", function(data){
+            //rs.nots.unread.push(data);
+        });
     }]);
 })();
