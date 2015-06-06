@@ -6,6 +6,7 @@ module.exports = new Schema({
     owner: Object,
     /*
         fr: friend reuest
+        fra: friend request accepted
         mess: message
     */
     type: String,

@@ -188,9 +188,16 @@ module.exports = {
                 friend.createdOn = new Date();
                 friend.save(function(err, friend){
                     if(err) throw err;
-                    Not.remove({reference: friend._id}, function(err) {
+                    Not.findOne({reference: friend._id}, function(err, not) {
                         if(err) throw err;
-                        return exits.success(friend);
+                        Not.update({_id: not._id}, {$set: {
+                            owner: not.other,
+                            other: not.owner,
+                            type: "fra",
+                        }}, function(err, notification){
+                            if(err) throw err;
+                            return exits.success(friend);
+                        });
                     });
                 });
             }else{

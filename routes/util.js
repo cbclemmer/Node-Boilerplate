@@ -55,6 +55,17 @@ module.exports = function(app, controllers){
                 }
             });
         })
+    });
+    app.post("/not/delnot/:not", function(req, res) {
+        redis.get(req.get("auth"), function(err, user) {
+            if(!user)
+                return res.json({err: "not logged in"});
+            controllers.notification.delNot({user: user, not: req.params.not}, {
+                success: function(){
+                    return res.json({status: true});
+                }
+            })
+        })
     })
     app.get('/', function(req, res) {
         res.render('index.html');

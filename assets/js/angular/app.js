@@ -115,7 +115,7 @@
                 if(data.err) return showErr(data.err);
                 for (var i=0;i<rs.nots.unRead.length;i++){
                     if(rs.nots.unRead[i]._id == not){
-                        rs.pag.nots.unRead[i].state = 1;
+                        rs.nots.unRead[i].state = 1;
                         var obj = rs.nots.unRead[i];
                         if(!rs.nots.read)
                             rs.nots.read = [obj];
@@ -125,10 +125,25 @@
                 }
             });
         }
+        this.delNot = function(not){
+            h.post("/not/delnot/"+not).success(function(data) {
+                if(data.err) return showErr(data.err);
+                for (var i=0;i<rs.nots.unRead.length;i++){
+                    if(rs.nots.unRead[i]._id == not){
+                        rs.nots.unRead[i].state = 1;
+                        var obj = rs.nots.unRead[i];
+                        if(!rs.nots.read)
+                            rs.nots.read = [obj];
+                        rs.nots.unRead.splice(i, 1);
+                        break;
+                    }
+                }
+            })
+        }
         this.getOldNots = function(){
             h.get("/not/getold").success(function(data){
                 if(data.err) return showErr(data.err);
-                rs.pag.nots.read = data;
+                rs.nots.read = data;
             });
         }
         /*

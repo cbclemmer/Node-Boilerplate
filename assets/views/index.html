@@ -202,6 +202,10 @@
                             <span ng-click="friendCtl.deleteRequest(not.other._id)" class="hyp">Ignore</span>&emsp;
                             <span ng-click="init.readNot(not._id)" class="hyp">Read</span>&emsp;
                         </div>
+                        <div ng-show="not.type=='fra'">
+                            <span ng-click="init.toUser(not.other.username)" class="hyp">@{{not.other.username}} </span>accepted your friend request.&emsp;
+                            <span ng-click="init.delNot(not._id)" class="hyp">Read</span>
+                        </div>
                     </div>
                     <div ng-show="nots.unRead.length == 0||!nots.unRead">
                         <i>No new notifications</i>
@@ -212,8 +216,8 @@
                         <div ng-show="not.type=='fr'">
                             New friend request from 
                             <span ng-click="init.toUser(not.other.username)" class="hyp">@{{not.other.username}}</span>&emsp;&emsp;
-                            <span ng-click="friendCtl.acceptRequest(not.reference)" class="hyp">Accept</span>&emsp;
-                            <span ng-click="friendCtl.deleteRequest(not.reference)" class="hyp">Ignore</span>&emsp;
+                            <span ng-click="friendCtl.acceptRequest(not.other._id)" class="hyp">Accept</span>&emsp;
+                            <span ng-click="friendCtl.deleteRequest(not.other._id)" class="hyp">Ignore</span>&emsp;
                         </div>
                     </div>
                     <div ng-show="nots.read.length == 0">

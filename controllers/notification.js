@@ -21,8 +21,22 @@ module.exports = {
                 not.save();
                 return exits.success();
             });
-            
-        })
+        });
+    },
+    /*
+        description: deletes a notification
+        inputs:
+            user: the user it belongs to
+            not: the id of the notification
+    */
+    delNot: function(inputs, exits){
+        User.findOne({_id: inputs.user}, function(err, user){
+            if(err) throw err;
+            Not.remove({_id: inputs.not, 'owner.username': user.username}, function(err){
+                if(err) throw err;
+                return exits.success();
+            });
+        });
     },
     /*
         description: returns a list of read notifications

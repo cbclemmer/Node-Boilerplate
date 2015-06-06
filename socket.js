@@ -31,18 +31,55 @@ module.exports = function(io, controllers){
         /*
             When a friend request is sent, the other user will recieve a notification
             data: 
-                sender: the sender's username
+                sender: the sender's authentication token
                 reciever: the reciever's id
         */
         socket.on("fr", function(data){
-            // Get the reciver's socket id
-            User.findOne({_id: data.reciever}, function(err, user){
-                if(err) throw err;
-                // find the Notification to send
-                Not.findOne({$and: [{'owner.username': user.username}, {'other.username': data.sender}]}, function(err, not){
+            redis.get(data.sender, function(err, send) {
+                // Get the reciver's socket id
+                User.find({$or: [{_id: data.reciever}, {_id: send}]}, function(err, user){
                     if(err) throw err;
-                    // send it to the requested socket
-                    return io.sockets.connected[user.socket].emit("not", not);
+                    var sender = {};
+                    var reciever = {};
+                    if(user[0]._id==sender){
+                        sender = user[0];
+                        reciever = user[1];
+                    }else{
+                        sender = user[1];
+                        reciever = user[0];
+                    }
+                    var obj = {
+                        owner: reciever,
+                        type: "fr",
+                        state: 0,
+                        other: sender,
+                        
+                    }
+                    return io.sockets.connected[reciever.socket].emit("not", obj);
+                });
+            });
+        });
+        socket.on("fra", function(data){
+            redis.get(data.sender, function(err, send) {
+                // Get the reciver's socket id
+                User.find({$or: [{_id: data.reciever}, {_id: send}]}, function(err, user){
+                    if(err) throw err;
+                    var sender = {};
+                    var reciever = {};
+                    if(user[0]._id==sender){
+                        sender = user[0];
+                        reciever = user[1];
+                    }else{
+                        sender = user[1];
+                        reciever = user[0];
+                    }
+                    var obj = {
+                        owner: reciever,
+                        type: "fra",
+                        state: 0,
+                        other: sender,
+                    }
+                    return io.sockets.connected[sender.socket].emit("not", obj);
                 });
             });
         });
