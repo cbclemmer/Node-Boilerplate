@@ -31,11 +31,12 @@
         }
         this.getNew = function(){
             if(rs.pag.posts){
-                h.post("/post/getnew", rs.pag.posts[0].createdOn).success(function(data){
+                h.post("/post/getnew/"+rs.pag._id, {created: rs.pag.posts[0].createdOn}).success(function(data){
                     if(data.err) return showErr(data.err);
-                    for (var i = 0;i<data.length;i++){
+                    for (var i = (data.length-1);i>=0;i--){
                         rs.pag.posts.unshift(data[i]);
                     }
+                    rs.pag.newPosts = 0;
                 });
             }
         }

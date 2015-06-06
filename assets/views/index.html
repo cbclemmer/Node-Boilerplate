@@ -164,6 +164,7 @@
                     <h2 class="hyp" ng-click="postCtl.show(post)">{{post.title}}</h2>
                     <div class="postTop">
                         <b>{{post.owner.name}}</b> 
+                        
                         <span ng-click="init.toUser(post.owner.username)">@{{post.owner.username}}</span>
                         <img src="icons/visable-black.png" class="notInline postVis" ng-show="post.public"/>
                         <img src="icons/notVisable-black.png" class="notInline postVis" ng-hide="post.public"/>

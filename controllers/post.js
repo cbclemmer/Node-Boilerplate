@@ -127,6 +127,12 @@ module.exports = {
             });
         });
     },
+    /*
+        description: returns the metadata about a post
+        inputs:
+            user: the current user id
+            post: the id of the post
+    */
     get: function(inputs, exits){
         Post.findOne({_id: inputs.post}, function(err, post){
             if(err) throw err;
@@ -139,7 +145,7 @@ module.exports = {
             if (post.public)
                 return exits.success(post);
             // if the user is friends with the user
-            Friend.findOne({users: inputs.user, users: post.owner._id}, function(err, friend){
+            Friend.findOne({$and: [{users: inputs.user}, {users: post.owner._id}]}, function(err, friend){
                 if(err) throw err;
                 if(friend)
                     return exits.success(post);
@@ -147,24 +153,19 @@ module.exports = {
             });
         });
     },
+    /*
+        description: gets posts for a user after a certain period of time
+        inputs:
+            current: the current user's id
+            time: the time of last post on that page
+            user: the id of the user to get the posts for
+    */
     getNew: function(inputs, exits){
-        Post.findOne({_id: inputs.post}, function(err, post){
+        var q = Post.find({createdOn: {$gt: inputs.time}, target: inputs.user});
+        q.sort("-createdOn");
+        q.exec(function(err, posts){
             if(err) throw err;
-            if(!post)
-                return exits.error("Could not find post");
-            // If the user is the one that wrote the post
-            if(post.owner._id == inputs.user)
-                return exits.success(post);
-            // if the post is public
-            if (post.public)
-                return exits.success(post);
-            // if the user is friends with the user
-            Friend.findOne({users: inputs.user, users: post.owner._id}, function(err, friend){
-                if(err) throw err;
-                if(friend)
-                    return exits.success(post);
-                return exits.error("You do not have permission");
-            });
+            return exits.success(posts);
         });
     }
 }
