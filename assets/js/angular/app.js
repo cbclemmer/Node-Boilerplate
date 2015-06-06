@@ -33,6 +33,9 @@
                         if(data.err)
                             return showErr(data.err);
                         rs.pag.posts = data;
+                        for(var i =0;i<data.length;i++){
+                            rs.pag.posts[i].prettyCreated = moment(rs.pag.posts[i].createdOn).format('LLL');
+                        }
                     });
                 }else if(window.location.hash.search("@") != -1){
                     var slug = window.location.hash.split("/")[2];
@@ -60,6 +63,9 @@
                                 rs.state = "user";
                                 rs.pag = user;
                                 rs.pag.posts = posts;
+                                for(var i =0;i<posts.length;i++){
+                                    rs.pag.posts[i].prettyCreated = moment(rs.pag.posts[i].createdOn).format('LLL');
+                                }
                                 rs.pag.newPosts = 0;
                                 h.get("/friend/getstate/"+rs.user._id+"/"+user._id).success(function(state){
                                     rs.pag.friends = state.state;
@@ -83,6 +89,9 @@
                 rs.pag = rs.user;
                 rs.pag.friends = 3;
                 rs.pag.posts = data;
+                for(var i =0;i<data.length;i++){
+                    rs.pag.posts[i].prettyCreated = moment(rs.pag.posts[i].createdOn).format('LLL');
+                }
             });
         }
         this.toFeed = function(){
@@ -108,6 +117,9 @@
                     rs.pag = user;
                     rs.pag.posts = posts;
                     rs.pag.newPosts = 0;
+                    for(var i =0;i<posts.length;i++){
+                        rs.pag.posts[i].prettyCreated = moment(rs.pag.posts[i].createdOn).format('LLL');
+                    }
                     h.get("/friend/getstate/"+rs.user._id+"/"+user._id).success(function(state){
                         rs.pag.friends = state.state;
                     });

@@ -161,14 +161,13 @@
                     {{pag.newPosts}} new posts. <span class="hyp" ng-click="postCtl.getNew()">Fetch Posts</span>
                 </div>
                 <div class="post" ng-repeat="post in pag.posts">
-                    <h2 class="hyp" ng-click="postCtl.show(post)">{{post.title}}</h2>
                     <div class="postTop">
                         <b>{{post.owner.name}}</b> 
-                        
-                        <span ng-click="init.toUser(post.owner.username)">@{{post.owner.username}}</span>
-                        <img src="icons/visable-black.png" class="notInline postVis" ng-show="post.public"/>
-                        <img src="icons/notVisable-black.png" class="notInline postVis" ng-hide="post.public"/>
+                        <span ng-click="init.toUser(post.owner.username)" class="hyp">@{{post.owner.username}}</span>
+                        <br>
+                        <i>{{post.prettyCreated}}</i>
                     </div><br>
+                    <h2 class="hyp" ng-click="postCtl.show(post)">{{post.title}}</h2>
                     <div class="postContent" ng-bind-html="post.preview"></div>
                 </div>
             </div>
