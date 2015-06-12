@@ -203,8 +203,8 @@
                     </div>
                 </div>
                 <div class="messageInput" ng-show="state=='mess'" ng-controller="messageController as messCtl">
-                    <form ng-submit="messCtl.send(message)">
-                    <input type="text" placeholder="message..." ng-model="message">
+                    <form ng-submit="messCtl.send(messCtl.message)">
+                    <input type="text" placeholder="message..." ng-model="messCtl.message">
                     </form>
                 </div>
             </div>

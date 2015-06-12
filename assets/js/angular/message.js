@@ -7,7 +7,14 @@
                 if(data.err) return showErr(data.err);
                 rs.pag.messages.push(data);
                 socket.emit("message", {sender: getCookie("auth"), message: data});
+                s.messCtl.message = "";
             });
         }
+        s.$watch(function () {
+            return document.getElementById("messages").innerHTML;
+        }, function(val) {
+            var objDiv = document.getElementById("messages");
+            objDiv.scrollTop = objDiv.scrollHeight;
+        });
     }]);
 })();

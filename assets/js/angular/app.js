@@ -188,8 +188,6 @@
         socket.on("not", function(data){
             if(data.message&& window.location.hash.search('@')!=-1){
                 rs.pag.messages.push(data.message);
-                var objDiv = document.getElementById("messages");
-                objDiv.scrollTop = objDiv.scrollHeight;
                 return;
             }
             if(data.message){
