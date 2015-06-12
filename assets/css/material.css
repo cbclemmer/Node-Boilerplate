@@ -183,7 +183,7 @@ input[type="text"]:focus {
 	height: 175px;
 	top: 0px;
 }
-.messages {
+#messages {
 	width: 700px;
 	margin-left: auto;
 	margin-right: auto;
@@ -390,6 +390,16 @@ input[type="text"]:focus {
 	margin-left: auto;
 	margin-right: auto;
 	width: 740px;
+}
+.messUser {
+	float: right;
+	width: 50%;
+	margin-right: 1%;
+}
+.messPage {
+	float: left;
+	width: 50%;
+	margin-left: 1%;
 }
 /*
 	Article specific

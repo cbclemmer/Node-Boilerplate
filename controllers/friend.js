@@ -93,7 +93,8 @@ module.exports = {
             1: request
             2: friends
         inputs:
-            u1, u2
+            u1: id of first user
+            u2: id of second user
         exits:
             success: returns true
             error: returns false

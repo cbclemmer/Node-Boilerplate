@@ -55,7 +55,12 @@ module.exports = function(io, controllers){
                         other: sender,
                         
                     }
-                    return io.sockets.connected[reciever.socket].emit("not", obj);
+                    if(io.sockets.connected[reciever.socket]){
+                        return io.sockets.connected[reciever.socket].emit("not", obj);
+                    }else{
+                        console.log("couldn't find socket "+ reciever.socket);
+                        console.log(io.sockets.connected);
+                    }
                 });
             });
         });
@@ -79,7 +84,12 @@ module.exports = function(io, controllers){
                         state: 0,
                         other: sender,
                     }
-                    return io.sockets.connected[sender.socket].emit("not", obj);
+                    if(io.sockets.connected[sender.socket]){
+                        return io.sockets.connected[sender.socket].emit("not", obj);
+                    }else{
+                        console.log("couldn't find socket "+ sender.socket);
+                        console.log(io.sockets.connected);
+                    }
                 });
             });
         });
@@ -100,6 +110,38 @@ module.exports = function(io, controllers){
         */
         socket.on("post", function(data) {
             io.to(data).emit("post", true);
-        })
+        });
+        /*
+            Send the notification of the message to the user
+            data:
+                sender: the id of the user that is sending the message
+                message: the message content
+        */
+        socket.on("message", function(data){
+            redis.get(data.sender, function(err, user) {
+                if(err) throw err;
+                var obj = {
+                    owner: data.message.to,
+                    other: data.message.from,
+                    type: "mess",
+                    state: 0,
+                    reference: data.message._id,
+                    createdOn: (new Date())
+                }
+                var notification = new Not(obj);
+                notification.save(function(err, not){
+                    if(err) throw err;
+                    if(io.sockets.connected[data.message.to.socket]){
+                        return io.sockets.connected[data.message.to.socket].emit("not", {
+                            message: data.message,
+                            not: not
+                        });
+                    }else{
+                        console.log("couldn't find socket "+ data.message.to.socket);
+                        console.log(io.sockets.connected)
+                    }
+                });
+            })
+        });
     });
 } 

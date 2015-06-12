@@ -3,4 +3,5 @@ module.exports = function(app, controllers){
     require("./util.js")(app, controllers);
     require("./post.js")(app, controllers);
     require("./friend.js")(app, controllers);
+    require("./message.js")(app, controllers);
 }

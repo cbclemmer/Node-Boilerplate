@@ -19,6 +19,7 @@
         <script src="js/angular/post.js"></script>
         <script src="js/angular/friend.js"></script>
         <script src="js/angular/user.js"></script>
+        <script src="js/angular/message.js"></script>
         <script src="js/angular/app.js"></script>
         <script src="js/material.js"></script>
         
@@ -191,13 +192,20 @@
                                 Messages
                 ##########################################
                 -->
-                <div class="messages" ng-show="state=='mess'">
-                    <div class="post" ng-repeat="mess in pag.messages">
-                        
+                <div id="messages" ng-show="state=='mess'">
+                    <div ng-repeat="mess in pag.messages">
+                        <div ng-show="mess.from._id == pag._id" class="post messPage">
+                            {{mess.content}}
+                        </div>
+                        <div ng-hide="mess.from._id == pag._id" class="post messUser">
+                            {{mess.content}}
+                        </div>
                     </div>
                 </div>
-                <div class="messageInput" ng-show="state=='mess'">
-                    <input type="text" placeholder="message...">
+                <div class="messageInput" ng-show="state=='mess'" ng-controller="messageController as messCtl">
+                    <form ng-submit="messCtl.send(message)">
+                    <input type="text" placeholder="message..." ng-model="message">
+                    </form>
                 </div>
             </div>
         </div>
@@ -235,6 +243,10 @@
                         </div>
                         <div ng-show="not.type=='fra'">
                             <span ng-click="init.toUser(not.other.username)" class="hyp">@{{not.other.username}} </span>accepted your friend request.&emsp;
+                            <span ng-click="init.delNot(not._id)" class="hyp">Read</span>
+                        </div>
+                        <div ng-show="not.type=='mess'">
+                            New message from <span ng-click="init.toUser(not.other.username)" class="hyp">@{{not.other.username}} </span>&emsp;
                             <span ng-click="init.delNot(not._id)" class="hyp">Read</span>
                         </div>
                     </div>

@@ -1,5 +1,5 @@
 (function(){
-    var app = angular.module("app", ['user', 'friend', 'post', 'ngSanitize', 'btford.socket-io']).
+    var app = angular.module("app", ['user', 'friend', 'post', 'message', 'ngSanitize', 'btford.socket-io']).
     factory('socket', function (socketFactory) {
         return socketFactory();
     });
@@ -133,9 +133,14 @@
                 socket.emit("toMess", {auth: getCookie("auth"), user: username});
                 window.location.hash = "@"+username+"/messages";
                 rs.pag = user;
-                h.get("/mess/get/"+username).success(function(mess) {
+                h.get("/mess/get/1/"+username).success(function(mess) {
                     if(mess.err) showErr(mess.err);
+                    for(var i=0;i<mess.length;i++){
+                        mess[i].created = moment(mess[i].createdOn).format('LLL');
+                    }
                     rs.pag.messages = mess;
+                    var objDiv = document.getElementById("messages");
+                    objDiv.scrollTop = objDiv.scrollHeight;
                 });
             });
         }
@@ -181,6 +186,15 @@
         #######################
         */
         socket.on("not", function(data){
+            if(data.message&& window.location.hash.search('@')!=-1){
+                rs.pag.messages.push(data.message);
+                var objDiv = document.getElementById("messages");
+                objDiv.scrollTop = objDiv.scrollHeight;
+                return;
+            }
+            if(data.message){
+                return rs.nots.unRead.push(data.not);
+            }
             rs.nots.unRead.push(data);
         });
         socket.on("post", function(data){
