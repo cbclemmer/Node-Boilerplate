@@ -1,0 +1,346 @@
+/*
+    This file covers the elements that will be shown in all the pages
+*/
+
+/*
+    General styles
+======================
+*/
+.notInline {
+	margin: 0;
+	width: auto;
+	width: 48px;
+	width: 48px;
+	cursor: pointer;
+	position: relative;
+	top: 15px;
+}
+.iconButton {
+	background: transparent center center no-repeat;
+	background-size: 24px 24px;
+	border: 0px;
+	height: 48px;
+	width: 48px;
+	cursor: pointer;
+}
+.hyp {
+	color: #2C56D4;
+	cursor: pointer;
+}
+
+#info, #err {
+	width: 50%;
+	height: 60px;
+	position: absolute;
+	background-color: green;
+	z-index: 100;
+	left: 25%;
+	top: 50px;
+	color: white;
+	display: none;
+	padding-top: 20px;
+	text-align: center;
+	font-size: 30pt;
+	border-radius: 4px;
+	box-shadow: 2px 2px 2px grey;
+}
+#err {
+	background-color: red;
+}
+
+/*
+#################
+        Top
+#################
+*/
+.top {
+	height: 75px;
+	background-color: #2196F3;
+	width: 95%;
+	color: white;
+	font-size: 34pt;
+	padding-left: 5%;
+	padding-top: 100px;
+	z-index: 10;
+	position: fixed;
+}
+/*
+	Top right of top bar, holds search and notifications icons
+*/
+.topRight {
+	float: right;
+}
+/*
+	creates a space between the top and the first content for the floating top part
+*/
+.holder {
+	height: 175px;
+	top: 0px;
+}
+/*
+	The button to bring up the side menu
+*/
+.hamburger {
+	background-image: url(../icons/hamburger.svg);
+}
+#menuButton {
+	position: fixed;
+	top: 10px;
+	left: 10px;
+}
+
+/*
+    Search
+===============
+*/
+#searchBar {
+	background-color: #2196F3;
+	border-bottom: 2px solid #42A5F5;
+	position: relative;
+	top: -200px;
+	display: none;
+    color: #FFEB3B;
+}
+#searchbar:focus {
+    color: #FFEB3B;
+}
+
+#searchResults {
+	width: 30%;
+	height: 150px;
+	background-color: white;
+	z-index: 10;
+	position: fixed;
+	top: 175px;
+	right: 0px;
+	box-shadow: -1px 3px 3px grey;
+	display: none;
+	z-index: 14;
+}
+#searchResults div {
+	width: 100%;
+	padding-left: 10%;
+	border-bottom: 1px solid rgba(0, 0, 0, .12);
+	padding-top: 10px;
+	padding-bottom: 10px;
+	overflow: hidden;
+	cursor: pointer;
+}
+#searchResults div span {
+	opacity: .54;
+}
+
+
+
+/*
+#######################
+        Side Nav
+#######################
+*/
+#sideNav {
+	display: none;
+	background-color: white;
+	z-index: 20;
+	width: 20%;
+	margin-left: 0%;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	box-shadow: 3px 3px 3px grey;
+	font-family: Roboto;
+	font-size: 20pt;
+}
+#sideNav ul li{
+	margin: 10px auto 20px 0px;
+	list-style-type: none;
+	cursor: pointer;
+	padding-left: 10%;
+	opacity: .54;
+}
+#shadow {
+	display: none;
+	background-color: black;
+	opacity: .7;
+	width: 100%;
+	position: fixed;
+	z-index: 15;
+	top: 0px;
+	left: 0px;
+}
+
+
+
+
+/*
+	on the post pages, the div that holds the name of the author
+*/
+.bottom {
+	position: fixed;
+	bottom: 0px;
+	width: 100%;
+	height: 40px;
+	padding-left: 5%;
+	padding-top: 10px;
+	background-color: white;
+	border-top: 1px solid #DBDBDB;
+}
+
+/*
+##########################
+        New Post
+##########################
+*/
+#newPost {
+	width: 80%;
+	margin-left: 10%;
+	position: fixed;	
+	background-color: white;
+	box-shadow: 3px 3px 3px grey;
+	display: none;
+	z-index: 8;
+}
+#postInput {
+	display: inline-table;
+	width: 40%;
+	margin-left: 5%;
+	font-family: Roboto;
+	font-size: 25pt;
+}
+#postInput textarea {
+	border: 0;
+	width: 100%;
+	height: 185px;
+	margin-top: 15px;
+	font-size: 20px;
+	font-family: Crimson;
+	line-height: 1.4;
+	resize: none;
+}
+#postInput textarea:focus {
+	outline: 0;
+}
+#newPostButton {
+	color: #FFEB3B;
+	display: inline-block;
+	font-family: Roboto;
+	font-size: 34pt;
+	cursor: pointer;
+}
+
+#postButton {
+	width: 30%;
+	height: 50px;
+	border: 0px;
+	background-color: #2196F3;
+	color: white;
+	font-family: Roboto;
+	font-size: 20pt;
+	margin-bottom: 30px;
+	border-radius: 3px;
+	opacity: .9;
+	cursor: pointer;
+}
+
+#postButton:hover {
+	opacity: 1;
+}
+
+#preview {
+	display: inline;
+	width: 45%;
+	height: 300px;
+	margin-right: 5%;
+	margin-top: 25px;
+	font-family: Crimson;
+	float: right;
+	overflow-y: scroll;
+}
+
+
+/*
+########################
+        About
+########################
+*/
+#aboutButton {
+	display: inline-block;
+}
+#aboutDiv {
+	width: 20%;
+	height: 80px;
+	box-shadow: 3px 3px 3px grey;
+	position: fixed;
+	background-color: rgba(0,0,0, .12);
+	display: none;
+}
+.aboutDivOption{
+	margin-top: 10px;
+	color: black;
+	font-family: Roboto;
+	font-size: 24pt;
+	width: 100%;
+	text-align: center;
+	padding-top: 10px;
+	cursor: pointer;
+	padding-bottom: 20px;
+	background-color: rgba(255,255,255,1);
+}
+.aboutDivOption:hover{
+	background-color: rgba(255,255,255,.9);
+}
+/*
+###############################
+            Friends
+###############################
+*/
+#friendsSearch {
+	background-color: #2196F3;
+	border-bottom: 2px solid #42A5F5;
+	position: relative;
+    color: #FFEB3B;
+}
+#friendsDiv {
+	width: 70%;
+	height: 700px;
+	position: absolute;
+	margin-left: 25%;
+	margin-top: 50px;
+	background-color: white;
+	box-shadow: 3px 3px 3px grey;
+	display: none;
+	z-index: 10;
+}
+.optionTop {
+	width: 100%;
+	background-color: #2196F3;
+	padding-bottom: 30px;
+}
+.optionTop h1{
+	padding-left: 40%;
+	padding-top: 10px;
+	color: white;
+}
+.optionTop input {
+	margin-left: 5%;
+}
+#friendsResults {
+	width: 100%;
+	display: block;
+}
+#friendsResults div {
+	width: 90%;
+	padding-left: 10%;
+	border-bottom: 1px solid rgba(0, 0, 0, .12);
+	padding-top: 10px;
+	padding-bottom: 10px;
+	overflow: hidden;
+	cursor: pointer;
+}
+#friendsExit {
+	float: right;
+	font-size: 24pt;
+	margin-right: 20px;
+	margin-top: 20px;
+	cursor: pointer;
+	color: #FFEB3B;
+}

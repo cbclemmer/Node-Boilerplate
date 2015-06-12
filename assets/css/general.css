@@ -1,0 +1,59 @@
+/*
+	Fonts
+=============
+*/
+@font-face {
+	font-family: Roboto;
+	src: url(fonts/RobotoTTF/Roboto-Regular.ttf);
+	font-style: normal;
+} 
+@font-face {
+	font-family: Crimson;
+	src: url(fonts/Crimson_Text/CrimsonText-Roman.ttf);
+	font-style: normal;
+}
+/*
+	Reset
+=============
+*/
+* {
+	padding: 0px;
+	margin: 0px;
+}
+/*
+	General structures
+==========================
+*/
+body {
+	background-color: rgba(0,0,0, .12);
+	opacity: 12%;
+	font-family: Roboto;
+	background-size: 100% auto;
+}
+h1 {
+	font-size: 36pt;
+	color: #2196F3;
+}
+button, select {
+	text-transform: none; 
+}
+img {
+	margin: 20px 0px 20px 0px;
+	width: 100%;
+	opacity: 1;
+}
+span {
+	opacity: .87;
+}
+/*
+	input
+=============
+*/
+input[type="text"] {
+	border: 0px;
+	font-size: 20pt;
+	color: rgba(255,255,255);
+}
+input[type="text"]:focus {
+  	outline: 0;
+}

@@ -1,0 +1,42 @@
+.post {
+	margin-top: 20px;
+	width: 700px;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: white;
+	padding: 20px;
+	box-shadow: 3px 3px 3px grey;
+	z-index: 1;
+}
+.postTop {
+	font-size: 20px;
+}
+.postVis {
+	float: right;
+	position: relative;
+	top: -15px;
+	width: 30px;
+	z-index: 1;
+}
+.postContent {
+	font-family: Crimson;
+	font-size: 20px;
+}
+.halfLeft {
+	width: 40%;
+	display: inline-block;
+	margin-right: 8%;
+	text-align: center;
+	cursor: pointer;
+}
+.halfRight {
+	width: 40%;
+	display: inline-block;
+	text-align: center;
+	cursor: pointer;
+}
+.pm {
+	margin-left: auto;
+	margin-right: auto;
+	width: 740px;
+}

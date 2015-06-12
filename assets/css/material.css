@@ -139,6 +139,9 @@ input[type="text"]:focus {
 	position: relative;
 	top: 15px;
 }
+/*
+	Top right of top bar, holds search and notifications icons
+*/
 .topRight {
 	float: right;
 }
@@ -150,6 +153,9 @@ input[type="text"]:focus {
 	width: 48px;
 	cursor: pointer;
 }
+/*
+	The button to bring up the side menu
+*/
 .hamburger {
 	background-image: url(../icons/hamburger.svg);
 }
@@ -158,6 +164,9 @@ input[type="text"]:focus {
 	top: 10px;
 	left: 10px;
 }
+/*
+	Top banner
+*/
 .top {
 	height: 75px;
 	background-color: #2196F3;
@@ -169,6 +178,9 @@ input[type="text"]:focus {
 	z-index: 10;
 	position: fixed;
 }
+/*
+	on the post pages, the div that holds the name of the author
+*/
 .bottom {
 	position: fixed;
 	bottom: 0px;
@@ -179,38 +191,20 @@ input[type="text"]:focus {
 	background-color: white;
 	border-top: 1px solid #DBDBDB;
 }
+/*
+	creates a space between the top and the first content for the floating top part
+*/
 .holder {
 	height: 175px;
 	top: 0px;
 }
-#messages {
-	width: 700px;
-	margin-left: auto;
-	margin-right: auto;
-	height: 600px;
-	margin-top: 30px;
-	overflow-y: scroll;
-	margin-bottom: 200px;
-}
-.messageInput {
-	width: 100%;
-	padding-left: 10%;
-	background-color: white;
-	padding-top: 10px;
-	height: 100px;
-	position: fixed;
-	bottom: 0px;
-}
-/*
-	Home specific
-====================
-*/
 #friendsSearch {
 	background-color: #2196F3;
 	border-bottom: 2px solid #42A5F5;
 	position: relative;
     color: #FFEB3B;
 }
+
 #newPost {
 	width: 80%;
 	margin-left: 10%;
@@ -276,7 +270,6 @@ input[type="text"]:focus {
 	float: right;
 	overflow-y: scroll;
 }
-
 
 #aboutButton {
 	display: inline-block;
@@ -349,6 +342,33 @@ input[type="text"]:focus {
 	cursor: pointer;
 	color: #FFEB3B;
 }
+/*
+	Message specific
+=========================
+*/
+
+#messages {
+	width: 700px;
+	margin-left: auto;
+	margin-right: auto;
+	height: 600px;
+	margin-top: 30px;
+	overflow-y: scroll;
+	margin-bottom: 200px;
+}
+.messageInput {
+	width: 100%;
+	padding-left: 10%;
+	background-color: white;
+	padding-top: 10px;
+	height: 100px;
+	position: fixed;
+	bottom: 0px;
+}
+/*
+	Home specific
+====================
+*/
 .post {
 	margin-top: 20px;
 	width: 700px;
